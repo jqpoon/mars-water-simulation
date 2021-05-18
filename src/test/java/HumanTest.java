@@ -12,8 +12,9 @@ public class HumanTest {
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
 
-  WaterTank potableWaterTank = context.mock(WaterTank.class);
-  Human human = new Human(potableWaterTank);
+  WaterTank potableWaterTank = context.mock(WaterTank.class, "potableWater");
+  WaterTank wasteWaterTank = context.mock(WaterTank.class, "wasteWater");
+  Human human = new Human(potableWaterTank, wasteWaterTank);
 
   @Test
   public void humanDrinksWaterFromPotableWater() {
@@ -34,6 +35,15 @@ public class HumanTest {
     human.drink(5);
 
     assertThat((int) human.getHealth(), is(lessThan((int) Human.INITIAL_HEALTH)));
+  }
+
+  @Test
+  public void humanCanReleaseWasteWater() {
+    context.checking(new Expectations() {{
+      oneOf(wasteWaterTank).depositWater(1);
+    }});
+
+    human.excreteWaste(1);
   }
 
 }
