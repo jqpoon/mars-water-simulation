@@ -6,14 +6,14 @@ public class WaterTankTest {
 
   @Test
   public void canDepositToWaterTank() {
-    WaterTank tank = new WaterTank();
+    SimpleWaterTank tank = new SimpleWaterTank();
     tank.depositWater(10);
     assertEquals(10, tank.getCurrentVolume());
   }
 
   @Test
   public void canWithdrawFromWaterTank() {
-    WaterTank tank = new WaterTank();
+    SimpleWaterTank tank = new SimpleWaterTank();
     tank.depositWater(10);
     assertEquals(10, tank.withdrawWater(10));
     assertEquals(0, tank.getCurrentVolume());
@@ -21,7 +21,7 @@ public class WaterTankTest {
 
   @Test
   public void cannotWithdrawWhenEmpty() {
-    WaterTank tank = new WaterTank();
+    SimpleWaterTank tank = new SimpleWaterTank();
     assertEquals(0, tank.withdrawWater(10));
     assertEquals(0, tank.getCurrentVolume());
   }
