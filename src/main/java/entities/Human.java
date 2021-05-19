@@ -1,3 +1,5 @@
+package entities;
+
 public class Human {
 
   public static final double INITIAL_HEALTH = 100;
@@ -20,8 +22,10 @@ public class Human {
     double volumeDrank = potableWaterTank.withdrawWater(volume);
     if (volumeDrank != volume) {
       health -= (volume - volumeDrank) * LACK_OF_WATER_HEALTH_REDUCTION_SCALE;
-      System.out.println("Insufficient water drank!");
+      health = Math.max(health, 0);
+      System.out.println("Insufficient water drank! Current health: " + health);
     }
+
   }
 
   public void excreteWaste(double volume) {

@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import entities.SimpleWaterTank;
 import org.junit.jupiter.api.Test;
 
 public class WaterTankTest {

@@ -1,3 +1,5 @@
+package entities;
+
 public class SimpleWaterTank implements WaterTank {
 
   private double currentVolume = 0;
