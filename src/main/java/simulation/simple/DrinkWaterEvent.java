@@ -4,6 +4,8 @@ import entities.Human;
 import java.util.Random;
 import simulation.framework.Event;
 
+/* Simulation event that causes human to drink 10L of water. After drinking,
+ * it will schedule a excreteWasteEvent a random time after the current time. */
 public class DrinkWaterEvent implements Event<SimpleSimulation> {
 
   Random random = new Random(42);
