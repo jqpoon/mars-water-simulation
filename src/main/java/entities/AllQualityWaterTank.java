@@ -3,24 +3,24 @@ package entities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleWaterTank implements WaterTank {
+public class AllQualityWaterTank implements WaterTank {
 
   private final Map<WaterQuality, Double> allVolumes = new HashMap<>();
 
-  public SimpleWaterTank() {
+  public AllQualityWaterTank() {
     allVolumes.put(WaterQuality.LOW, 0.0);
     allVolumes.put(WaterQuality.HIGH, 0.0);
   }
 
-  private void updateVolume(double volume, WaterQuality quality) {
+  protected void updateVolume(double volume, WaterQuality quality) {
     allVolumes.put(quality, volume);
   }
 
-  private void addVolume(double volume, WaterQuality quality) {
+  protected void addVolume(double volume, WaterQuality quality) {
     updateVolume(getCurrentVolume(quality) + volume, quality);
   }
 
-  private void removeVolume(double volume, WaterQuality quality) {
+  protected void removeVolume(double volume, WaterQuality quality) {
     updateVolume(getCurrentVolume(quality) - volume, quality);
   }
 
