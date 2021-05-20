@@ -15,10 +15,6 @@ public class SimpleSimulation extends Simulation<SimpleSimulation> {
   private final Human joe = new HumanBuilder().withPotableWaterTank(potableWater)
       .withWasteWaterTank(wasteWater).build();
 
-  public SimpleSimulation() {
-    potableWater.depositWater(34);
-  }
-
   public Human getHuman() {
     return joe;
   }
@@ -33,9 +29,15 @@ public class SimpleSimulation extends Simulation<SimpleSimulation> {
     return this;
   }
 
+  @Override
+  protected void initSimulation() {
+    potableWater.depositWater(34);
+    schedule(new DrinkWaterEvent(), 0);
+  }
+
   public static void main(String[] args) {
     SimpleSimulation simulation = new SimpleSimulation();
-    simulation.schedule(new DrinkWaterEvent(), 0);
+    simulation.initSimulation();
     simulation.simulate();
   }
 
