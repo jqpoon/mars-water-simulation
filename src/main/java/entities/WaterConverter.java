@@ -4,12 +4,14 @@ import entities.tanks.WaterTank;
 
 public class WaterConverter {
 
+  private final double efficiency;
   private final double volumePerConversion;
   private final WaterTank sourceTank;
   private final WaterTank destinationTank;
 
   public WaterConverter(double volumePerConversion,
-      WaterTank sourceTank, WaterTank destinationTank) {
+      double efficiency, WaterTank sourceTank, WaterTank destinationTank) {
+    this.efficiency = efficiency;
     this.volumePerConversion = volumePerConversion;
     this.sourceTank = sourceTank;
     this.destinationTank = destinationTank;
@@ -24,7 +26,8 @@ public class WaterConverter {
   }
 
   public void convert() {
-    double volumeToConvert = sourceTank.withdrawWater(volumePerConversion);
+    double volumeToConvert =
+        sourceTank.withdrawWater(volumePerConversion) * efficiency;
     destinationTank.depositWater(volumeToConvert);
   }
 

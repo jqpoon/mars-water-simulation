@@ -12,8 +12,8 @@ public class WaterConverterTest {
   public JUnitRuleMockery context = new JUnitRuleMockery();
   WaterTank sourceTank = context.mock(WaterTank.class, "sourceTank");
   WaterTank destinationTank = context.mock(WaterTank.class, "destinationTank");
-  WaterConverter converter = new WaterConverter(3,
-      sourceTank, destinationTank);
+  WaterConverter efficientConverter = new WaterConverter(3, 1
+      , sourceTank, destinationTank);
 
   @Test
   public void converterCanConvertLowToHighQualityWater() {
@@ -24,7 +24,7 @@ public class WaterConverterTest {
       oneOf(destinationTank).depositWater(3);
     }});
 
-    converter.convert();
+    efficientConverter.convert();
   }
 
   @Test
@@ -35,7 +35,21 @@ public class WaterConverterTest {
       oneOf(destinationTank).depositWater(1);
     }});
 
-    converter.convert();
+    efficientConverter.convert();
+  }
+
+  @Test
+  public void converterAdheresToEfficiency() {
+    WaterConverter notEfficientConverter = new WaterConverter(3, 0.5
+        , sourceTank, destinationTank);
+
+    context.checking(new Expectations() {{
+      oneOf(sourceTank).withdrawWater(3);
+      will(returnValue((double) 3)); // Returns actual volume of water withdrawn
+      oneOf(destinationTank).depositWater(1.5);
+    }});
+
+    notEfficientConverter.convert();
   }
 
 }
