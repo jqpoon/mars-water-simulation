@@ -9,21 +9,17 @@ public class WaterGenerator {
   private final WaterTank tank;
   private final double volumePerGeneration;
 
-  private WaterGenerator(WaterQuality quality, double volumePerGeneration) {
-    switch (quality) {
-      case LOW -> tank = new LowQualityWaterTank();
-      case HIGH -> tank = new HighQualityWaterTank();
-      default -> throw new RuntimeException();
-    }
+  public WaterGenerator(WaterTank tank, double volumePerGeneration) {
+    this.tank = tank;
     this.volumePerGeneration = volumePerGeneration;
   }
 
   public static WaterGenerator LowQualityWaterGenerator(double volumePerGeneration) {
-    return new WaterGenerator(WaterQuality.LOW, volumePerGeneration);
+    return new WaterGenerator(new LowQualityWaterTank(), volumePerGeneration);
   }
 
   public static WaterGenerator HighQualityWaterGenerator(double volumePerGeneration) {
-    return new WaterGenerator(WaterQuality.HIGH, volumePerGeneration);
+    return new WaterGenerator(new HighQualityWaterTank(), volumePerGeneration);
   }
 
   public void generate() {
