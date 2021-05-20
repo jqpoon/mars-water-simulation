@@ -1,7 +1,9 @@
 package simulation.simple;
 
 import entities.Human;
+import entities.HumanBuilder;
 import entities.SimpleWaterTank;
+import entities.WaterQuality;
 import entities.WaterTank;
 import simulation.framework.Simulation;
 
@@ -10,10 +12,11 @@ public class SimpleSimulation extends Simulation<SimpleSimulation> {
 
   private final WaterTank potableWater = new SimpleWaterTank();
   private final WaterTank wasteWater = new SimpleWaterTank();
-  private final Human joe = new Human(potableWater, wasteWater);
+  private final Human joe = new HumanBuilder().withPotableWaterTank(potableWater)
+      .withWasteWaterTank(wasteWater).build();
 
   public SimpleSimulation() {
-    potableWater.depositWater(34);
+    potableWater.depositWater(34, WaterQuality.HIGH);
   }
 
   public Human getHuman() {

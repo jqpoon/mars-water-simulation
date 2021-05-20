@@ -1,8 +1,8 @@
+package entities;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-import entities.Human;
-import entities.WaterTank;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.jupiter.api.Test;
@@ -16,12 +16,13 @@ public class HumanTest {
 
   WaterTank potableWaterTank = context.mock(WaterTank.class, "potableWater");
   WaterTank wasteWaterTank = context.mock(WaterTank.class, "wasteWater");
-  Human human = new Human(potableWaterTank, wasteWaterTank);
+  Human human = new HumanBuilder().withPotableWaterTank(potableWaterTank)
+      .withWasteWaterTank(wasteWaterTank).build();
 
   @Test
   public void humanDrinksWaterFromPotableWater() {
     context.checking(new Expectations() {{
-      oneOf(potableWaterTank).withdrawWater(5);
+      oneOf(potableWaterTank).withdrawWater(5, WaterQuality.HIGH);
     }});
 
     human.drink(5);
@@ -30,7 +31,7 @@ public class HumanTest {
   @Test
   public void humanHealthGoesDownIfNotEnoughWaterDrank() {
     context.checking(new Expectations() {{
-      allowing(potableWaterTank).withdrawWater(with(any(Double.class)));
+      allowing(potableWaterTank).withdrawWater(with(any(Double.class)), with(any(WaterQuality.class)));
       will(returnValue((double) 0));
     }});
 
@@ -42,7 +43,7 @@ public class HumanTest {
   @Test
   public void humanCanReleaseWasteWater() {
     context.checking(new Expectations() {{
-      oneOf(wasteWaterTank).depositWater(1);
+      oneOf(wasteWaterTank).depositWater(1, WaterQuality.LOW);
     }});
 
     human.excreteWaste(1);

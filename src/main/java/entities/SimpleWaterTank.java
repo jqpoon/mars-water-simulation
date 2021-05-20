@@ -1,31 +1,52 @@
 package entities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SimpleWaterTank implements WaterTank {
 
-  private double currentVolume = 0;
+  private final Map<WaterQuality, Double> allVolumes = new HashMap<>();
+
+  public SimpleWaterTank() {
+    allVolumes.put(WaterQuality.LOW, 0.0);
+    allVolumes.put(WaterQuality.HIGH, 0.0);
+  }
+
+  private void updateVolume(double volume, WaterQuality quality) {
+    allVolumes.put(quality, volume);
+  }
+
+  private void addVolume(double volume, WaterQuality quality) {
+    updateVolume(getCurrentVolume(quality) + volume, quality);
+  }
+
+  private void removeVolume(double volume, WaterQuality quality) {
+    updateVolume(getCurrentVolume(quality) - volume, quality);
+  }
 
   @Override
-  public double getCurrentVolume() {
-    return currentVolume;
+  public double getCurrentVolume(WaterQuality quality) {
+    return allVolumes.get(quality);
   }
 
   /* Returns actual volume of water withdrawn. */
   @Override
-  public double withdrawWater(double volume) {
+  public double withdrawWater(double volume, WaterQuality quality) {
+    double currentVolume = getCurrentVolume(quality);
+
     if (volume >= currentVolume) {
-      double actualVolumeReturned = currentVolume;
-      currentVolume = 0;
-      return actualVolumeReturned;
+      updateVolume(0, quality);
+      return currentVolume;
     }
 
-    currentVolume -= volume;
+    removeVolume(volume, quality);
     return volume;
   }
 
   /* Returns actual volume of water deposited. */
   @Override
-  public double depositWater(double volume) {
-    currentVolume += volume;
+  public double depositWater(double volume, WaterQuality quality) {
+    addVolume(volume, quality);
     return volume;
   }
 

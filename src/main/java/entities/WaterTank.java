@@ -2,11 +2,11 @@ package entities;
 
 public interface WaterTank {
 
-  double getCurrentVolume();
+  double getCurrentVolume(WaterQuality quality);
 
   /* Returns actual volume of water withdrawn. */
-  double withdrawWater(double volume);
+  double withdrawWater(double volume, WaterQuality quality);
 
   /* Returns actual volume of water deposited. */
-  double depositWater(double volume);
+  double depositWater(double volume, WaterQuality quality);
 }
