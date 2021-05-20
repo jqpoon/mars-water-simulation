@@ -2,21 +2,21 @@ package simulation.simple;
 
 import entities.Human;
 import entities.HumanBuilder;
-import entities.AllQualityWaterTank;
-import entities.WaterQuality;
-import entities.WaterTank;
+import entities.tanks.HighQualityWaterTank;
+import entities.tanks.LowQualityWaterTank;
+import entities.tanks.WaterTank;
 import simulation.framework.Simulation;
 
 /* Simulates human drinking water until water tank is empty. */
 public class SimpleSimulation extends Simulation<SimpleSimulation> {
 
-  private final WaterTank potableWater = new AllQualityWaterTank();
-  private final WaterTank wasteWater = new AllQualityWaterTank();
+  private final WaterTank potableWater = new HighQualityWaterTank();
+  private final WaterTank wasteWater = new LowQualityWaterTank();
   private final Human joe = new HumanBuilder().withPotableWaterTank(potableWater)
       .withWasteWaterTank(wasteWater).build();
 
   public SimpleSimulation() {
-    potableWater.depositWater(34, WaterQuality.HIGH);
+    potableWater.depositWater(34);
   }
 
   public Human getHuman() {

@@ -1,5 +1,7 @@
 package entities;
 
+import entities.tanks.WaterTank;
+
 public class HumanBuilder {
 
   private WaterTank potableWaterTank;

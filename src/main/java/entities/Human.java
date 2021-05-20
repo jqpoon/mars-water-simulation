@@ -1,5 +1,7 @@
 package entities;
 
+import entities.tanks.WaterTank;
+
 public class Human {
 
   public static final double INITIAL_HEALTH = 100;
@@ -19,7 +21,7 @@ public class Human {
   }
 
   public void drink(double volume) {
-    double volumeDrank = potableWaterTank.withdrawWater(volume, WaterQuality.HIGH);
+    double volumeDrank = potableWaterTank.withdrawWater(volume);
     if (volumeDrank != volume) {
       health -= (volume - volumeDrank) * LACK_OF_WATER_HEALTH_REDUCTION_SCALE;
       health = Math.max(health, 0);
@@ -29,7 +31,7 @@ public class Human {
   }
 
   public void excreteWaste(double volume) {
-    wasteWaterTank.depositWater(volume, WaterQuality.LOW);
+    wasteWaterTank.depositWater(volume);
   }
 
 }

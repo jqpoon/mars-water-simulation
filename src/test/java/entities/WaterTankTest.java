@@ -2,44 +2,38 @@ package entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import entities.tanks.AbstractWaterTank;
+import entities.tanks.HighQualityWaterTank;
 import org.junit.jupiter.api.Test;
 
 public class WaterTankTest {
 
   @Test
   public void tankInitiallyHasNoWater() {
-    AllQualityWaterTank tank = new AllQualityWaterTank();
-    assertEquals(0, tank.getCurrentVolume(WaterQuality.LOW));
-    assertEquals(0, tank.getCurrentVolume(WaterQuality.HIGH));
+    AbstractWaterTank tank = new HighQualityWaterTank();
+    assertEquals(0, tank.getCurrentVolume());
+    assertEquals(0, tank.getCurrentVolume());
   }
 
   @Test
   public void canDepositToWaterTank() {
-    AllQualityWaterTank tank = new AllQualityWaterTank();
-    tank.depositWater(10, WaterQuality.HIGH);
-    assertEquals(10, tank.getCurrentVolume(WaterQuality.HIGH));
+    AbstractWaterTank tank = new HighQualityWaterTank();
+    tank.depositWater(10);
+    assertEquals(10, tank.getCurrentVolume());
   }
 
   @Test
   public void canWithdrawFromWaterTank() {
-    AllQualityWaterTank tank = new AllQualityWaterTank();
-    tank.depositWater(10, WaterQuality.HIGH);
-    assertEquals(10, tank.withdrawWater(10, WaterQuality.HIGH));
-    assertEquals(0, tank.getCurrentVolume(WaterQuality.HIGH));
+    AbstractWaterTank tank = new HighQualityWaterTank();
+    tank.depositWater(10);
+    assertEquals(10, tank.withdrawWater(10));
+    assertEquals(0, tank.getCurrentVolume());
   }
 
   @Test
   public void cannotWithdrawWhenEmpty() {
-    AllQualityWaterTank tank = new AllQualityWaterTank();
-    assertEquals(0, tank.withdrawWater(10, WaterQuality.HIGH));
-    assertEquals(0, tank.getCurrentVolume(WaterQuality.HIGH));
+    AbstractWaterTank tank = new HighQualityWaterTank();
+    assertEquals(0, tank.withdrawWater(10));
+    assertEquals(0, tank.getCurrentVolume());
   }
-
-  @Test
-  public void addLowQualityWaterDoesNotAffectHighQualityLevel() {
-    AllQualityWaterTank tank = new AllQualityWaterTank();
-    tank.depositWater(10, WaterQuality.LOW);
-    assertEquals(0, tank.getCurrentVolume(WaterQuality.HIGH));
-  }
-
 }

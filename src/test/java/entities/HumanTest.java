@@ -3,6 +3,7 @@ package entities;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import entities.tanks.WaterTank;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class HumanTest {
   @Test
   public void humanDrinksWaterFromPotableWater() {
     context.checking(new Expectations() {{
-      oneOf(potableWaterTank).withdrawWater(5, WaterQuality.HIGH);
+      oneOf(potableWaterTank).withdrawWater(5);
     }});
 
     human.drink(5);
@@ -31,7 +32,7 @@ public class HumanTest {
   @Test
   public void humanHealthGoesDownIfNotEnoughWaterDrank() {
     context.checking(new Expectations() {{
-      allowing(potableWaterTank).withdrawWater(with(any(Double.class)), with(any(WaterQuality.class)));
+      allowing(potableWaterTank).withdrawWater(with(any(Double.class)));
       will(returnValue((double) 0));
     }});
 
@@ -43,7 +44,7 @@ public class HumanTest {
   @Test
   public void humanCanReleaseWasteWater() {
     context.checking(new Expectations() {{
-      oneOf(wasteWaterTank).depositWater(1, WaterQuality.LOW);
+      oneOf(wasteWaterTank).depositWater(1);
     }});
 
     human.excreteWaste(1);
