@@ -1,5 +1,6 @@
 package entities;
 
+import static entities.WaterGenerator.HighQualityWaterGenerator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -8,19 +9,19 @@ public class WaterGeneratorTest {
 
   @Test
   public void generatorCanGenerateWater() {
-    WaterGenerator generator = new WaterGenerator(WaterQuality.HIGH, 5);
-    assertEquals(0, generator.getCurrentVolume(WaterQuality.HIGH));
+    WaterGenerator generator = HighQualityWaterGenerator(5);
+    assertEquals(0, generator.getCurrentVolume());
     generator.generate();
-    assertEquals(5, generator.getCurrentVolume(WaterQuality.HIGH));
+    assertEquals(5, generator.getCurrentVolume());
   }
 
   @Test
   public void generatorCanGenerateMultipleTimes() {
-    WaterGenerator generator = new WaterGenerator(WaterQuality.HIGH, 5);
+    WaterGenerator generator = HighQualityWaterGenerator(5);
     generator.generate();
     generator.generate();
     generator.generate();
-    assertEquals(15, generator.getCurrentVolume(WaterQuality.HIGH));
+    assertEquals(15, generator.getCurrentVolume());
   }
 
 }
