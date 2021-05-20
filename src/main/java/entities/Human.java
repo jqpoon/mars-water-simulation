@@ -20,6 +20,8 @@ public class Human {
     return health;
   }
 
+  /* Attempts to drink water from the potable water tank. If unable to drink
+   * the requested amount, then reduce health scaled to a constant. */
   public void drink(double volume) {
     double volumeDrank = potableWaterTank.withdrawWater(volume);
     if (volumeDrank != volume) {
@@ -27,7 +29,6 @@ public class Human {
       health = Math.max(health, 0);
       System.out.println("Insufficient water drank! Current health: " + health);
     }
-
   }
 
   public void excreteWaste(double volume) {
