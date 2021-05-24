@@ -8,6 +8,7 @@ import entities.WaterGenerator;
 import entities.tanks.HighQualityWaterTank;
 import entities.tanks.LowQualityWaterTank;
 import entities.tanks.WaterTank;
+import java.util.Random;
 import simulation.framework.Simulation;
 
 /* Simulates a human drinking water and excreting into a waste tank.
@@ -15,14 +16,19 @@ import simulation.framework.Simulation;
  * to convert low quality water to high quality water. */
 public class ComplexSimulation extends Simulation<ComplexSimulation> {
 
-  private final double LITRES_PRODUCED_FROM_GENERATOR = 45.0;
-  private final double INITIAL_STARTING_VOLUME = 840.0;
-  private final double CONVERTER_EFFICIENCY = 0.935;
-  private final double HUMAN_CONSUMPTION_PER_DAY = 2.5;
-  private final double HUMAN_WASTE_PER_DAY = 2.4;
+  public static final double LITRES_PRODUCED_FROM_GENERATOR = 45.0;
+  public static final double INITIAL_STARTING_VOLUME = 840.0;
+  public static final double CONVERTER_EFFICIENCY = 0.935;
+  public static final double HUMAN_CONSUMPTION_PER_DAY = 2.5;
+  public static final double HUMAN_WASTE_PER_DAY = 2.4;
 
+  private final Random randomInst = new Random(42);
   private final WaterTank potableWaterTank = new HighQualityWaterTank();
   private final WaterTank wasteWaterTank = new LowQualityWaterTank();
+
+  protected Random getRandomInstance() {
+    return randomInst;
+  }
 
   /* Water generator that direct deposits generated water into
    * the potableWaterTank. */
@@ -47,7 +53,7 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
 
   @Override
   protected boolean stop() {
-    return human.getHealth() <= 0;
+    return human.getStandardOfLiving() <= 0;
   }
 
   @Override
@@ -58,6 +64,9 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
   @Override
   protected void initSimulation() {
     potableWaterTank.depositWater(INITIAL_STARTING_VOLUME);
+    for (int i = 0; i < 100; i++) {
+      schedule(new DrinkWaterEvent(), i);
+    }
   }
 
   public static void main(String[] args) {
