@@ -21,7 +21,7 @@ public class SimpleSimulation extends Simulation<SimpleSimulation> {
 
   @Override
   protected boolean stop() {
-    return joe.getHealth() <= 0;
+    return joe.getStandardOfLiving() <= 0;
   }
 
   @Override

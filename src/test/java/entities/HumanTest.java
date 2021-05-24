@@ -30,7 +30,7 @@ public class HumanTest {
   }
 
   @Test
-  public void humanHealthGoesDownIfNotEnoughWaterDrank() {
+  public void standardOfLivingGoesDownIfNotEnoughWaterDrank() {
     context.checking(new Expectations() {{
       allowing(potableWaterTank).withdrawWater(with(any(Double.class)));
       will(returnValue((double) 0));
@@ -38,7 +38,7 @@ public class HumanTest {
 
     human.drink(5);
 
-    assertThat((int) human.getHealth(), is(lessThan((int) Human.INITIAL_HEALTH)));
+    assertThat((int) human.getStandardOfLiving(), is(lessThan((int) Human.INITIAL_SOL_VALUE)));
   }
 
   @Test
