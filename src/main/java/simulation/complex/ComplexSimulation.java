@@ -17,7 +17,7 @@ import simulation.framework.Simulation;
 public class ComplexSimulation extends Simulation<ComplexSimulation> {
 
   public static final double LITRES_PRODUCED_FROM_GENERATOR = 45.0;
-  public static final double INITIAL_STARTING_VOLUME = 840.0;
+  public static final double INITIAL_STARTING_VOLUME = 50.0;
   public static final double CONVERTER_EFFICIENCY = 0.935;
   public static final double HUMAN_CONSUMPTION_PER_DAY = 2.5;
   public static final double HUMAN_WASTE_PER_DAY = 2.4;
@@ -40,7 +40,7 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
       .withEfficiency(CONVERTER_EFFICIENCY)
       .withSourceTank(wasteWaterTank)
       .withDestinationTank(potableWaterTank)
-      .withVolumePerConversion(100000) // Assume we can convert everything at once
+      .withVolumePerConversion(1) // Assume we can convert everything at once
       .build();
 
   private final Human human = new HumanBuilder()
@@ -49,6 +49,10 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
 
   public Human getHuman() {
     return human;
+  }
+
+  public WaterConverter getWaterRecycler() {
+    return waterRecycler;
   }
 
   @Override
@@ -65,14 +69,22 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
   protected void initSimulation() {
     potableWaterTank.depositWater(INITIAL_STARTING_VOLUME);
     for (int i = 0; i < 100; i++) {
-      schedule(new DrinkWaterEvent(), i);
+      schedule(new HourEvent(), i);
     }
+  }
+
+  private void printStatistics() {
+    System.out.println("\n--------- END OF SIMULATION ---------");
+    System.out.printf("Simulation lasted for %.4f hours. %n", getCurrentTime());
+    System.out.printf("Water left in potable tank: %.4fL%n", potableWaterTank.getCurrentVolume());
+    System.out.printf("Water in waste tank: %.4fL%n", wasteWaterTank.getCurrentVolume());
   }
 
   public static void main(String[] args) {
     ComplexSimulation simulation = new ComplexSimulation();
     simulation.initSimulation();
     simulation.simulate();
+    simulation.printStatistics();
   }
 
 }

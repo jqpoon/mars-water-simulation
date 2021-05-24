@@ -25,9 +25,11 @@ public class Human {
   public void drink(double volume) {
     double volumeDrank = potableWaterTank.withdrawWater(volume);
     if (volumeDrank != volume) {
-      standardOfLiving -= (volume - volumeDrank) * LACK_OF_WATER_HEALTH_REDUCTION_SCALE;
+      standardOfLiving -=
+          (volume - volumeDrank) * LACK_OF_WATER_HEALTH_REDUCTION_SCALE;
       standardOfLiving = Math.max(standardOfLiving, 0);
-      System.out.println("Insufficient water drank! Current health: " + standardOfLiving);
+      System.out.printf(
+          "Insufficient water drank! Current standard of living: %.02f%n", standardOfLiving);
     }
   }
 
