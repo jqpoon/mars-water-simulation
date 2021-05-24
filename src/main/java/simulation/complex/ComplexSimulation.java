@@ -18,9 +18,11 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
 
   public static final double LITRES_PRODUCED_FROM_GENERATOR = 45.0;
   public static final double INITIAL_STARTING_VOLUME = 50.0;
-  public static final double CONVERTER_EFFICIENCY = 0.935;
+  public static final double CONVERTER_EFFICIENCY = 0.2;
   public static final double HUMAN_CONSUMPTION_PER_DAY = 2.5;
   public static final double HUMAN_WASTE_PER_DAY = 2.4;
+  public static final double VOLUME_PER_CONVERSION = 10;
+  public static final int HOURS_BETWEEN_RECYCLE_EVENT = 5;
 
   private final Random randomInst = new Random(42);
   private final WaterTank potableWaterTank = new HighQualityWaterTank();
@@ -40,7 +42,7 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
       .withEfficiency(CONVERTER_EFFICIENCY)
       .withSourceTank(wasteWaterTank)
       .withDestinationTank(potableWaterTank)
-      .withVolumePerConversion(1) // Assume we can convert everything at once
+      .withVolumePerConversion(VOLUME_PER_CONVERSION)
       .build();
 
   private final Human human = new HumanBuilder()
