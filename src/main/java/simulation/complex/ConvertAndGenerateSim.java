@@ -9,28 +9,26 @@ import entities.tanks.HighQualityWaterTank;
 import entities.tanks.LowQualityWaterTank;
 import entities.tanks.WaterTank;
 import java.util.Random;
+import simulation.complex.events.timed.DailyEvent;
+import simulation.complex.events.timed.HourlyEvent;
 import simulation.framework.Simulation;
 
 /* Simulates a human drinking water and excreting into a waste tank.
  * Also has a generator that generates a trickle of water and a converter
  * to convert low quality water to high quality water. */
-public class ComplexSimulation extends Simulation<ComplexSimulation> {
+public class ConvertAndGenerateSim extends Simulation<ConvertAndGenerateSim> {
 
-  public static final double LITRES_PRODUCED_FROM_GENERATOR = 45.0;
+  public static final double LITRES_PRODUCED_FROM_GENERATOR = 30.0;
   public static final double INITIAL_STARTING_VOLUME = 50.0;
   public static final double CONVERTER_EFFICIENCY = 0.2;
   public static final double HUMAN_CONSUMPTION_PER_DAY = 2.5;
   public static final double HUMAN_WASTE_PER_DAY = 2.4;
-  public static final double VOLUME_PER_CONVERSION = 10;
+  public static final double VOLUME_PER_CONVERSION = 5.0;
   public static final int HOURS_BETWEEN_RECYCLE_EVENT = 5;
 
   private final Random randomInst = new Random(42);
   private final WaterTank potableWaterTank = new HighQualityWaterTank();
   private final WaterTank wasteWaterTank = new LowQualityWaterTank();
-
-  protected Random getRandomInstance() {
-    return randomInst;
-  }
 
   /* Water generator that direct deposits generated water into
    * the potableWaterTank. */
@@ -49,6 +47,9 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
       .withPotableWaterTank(potableWaterTank)
       .withWasteWaterTank(wasteWaterTank).build();
 
+  public Random getRandomInstance() {
+    return randomInst;
+  }
   public Human getHuman() {
     return human;
   }
@@ -57,21 +58,25 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
     return waterRecycler;
   }
 
+  public WaterGenerator getProductionUnit() {
+    return productionUnit;
+  }
+
   @Override
   protected boolean stop() {
     return human.getStandardOfLiving() <= 0;
   }
 
   @Override
-  protected ComplexSimulation getSimulationType() {
+  protected ConvertAndGenerateSim getSimulationType() {
     return this;
   }
 
   @Override
   protected void initSimulation() {
     potableWaterTank.depositWater(INITIAL_STARTING_VOLUME);
-    for (int i = 0; i < 100; i++) {
-      schedule(new HourEvent(), i);
+    for (int i = 0; i < 2; i++) {
+      schedule(new DailyEvent(), i * 24);
     }
   }
 
@@ -83,7 +88,7 @@ public class ComplexSimulation extends Simulation<ComplexSimulation> {
   }
 
   public static void main(String[] args) {
-    ComplexSimulation simulation = new ComplexSimulation();
+    ConvertAndGenerateSim simulation = new ConvertAndGenerateSim();
     simulation.initSimulation();
     simulation.simulate();
     simulation.printStatistics();

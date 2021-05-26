@@ -1,16 +1,17 @@
-package simulation.complex;
+package simulation.complex.events;
 
 import entities.Human;
+import simulation.complex.ConvertAndGenerateSim;
 import simulation.framework.Event;
 
 /* Human drinks water and excretes that water some time later. */
-public class DrinkWaterEvent implements Event<ComplexSimulation> {
+public class DrinkWaterEvent implements Event<ConvertAndGenerateSim> {
 
   @Override
-  public void invoke(ComplexSimulation simulation) {
+  public void invoke(ConvertAndGenerateSim simulation) {
     Human human = simulation.getHuman();
     System.out.printf("Tried drinking water at: %.4f%n", simulation.getCurrentTime());
-    human.drink(ComplexSimulation.HUMAN_CONSUMPTION_PER_DAY);
+    human.drink(ConvertAndGenerateSim.HUMAN_CONSUMPTION_PER_DAY);
 
     /* Wait some time. */
     double waitTime = simulation.getRandomInstance().nextFloat();
