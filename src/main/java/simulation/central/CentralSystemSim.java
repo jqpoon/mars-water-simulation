@@ -6,6 +6,7 @@ import entities.WaterConverter;
 import entities.WaterConverterBuilder;
 import entities.WaterGenerator;
 import entities.WaterUseCase;
+import entities.tanks.CropWaterTank;
 import entities.tanks.LowQualityWaterTank;
 import entities.tanks.SmartWaterTank;
 import entities.tanks.WaterTank;
@@ -23,15 +24,17 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   private final int population = 1;
   private final int simulationDayCount = 1;
 
+  private static final double CROP_EFFICIENCY = 88.0/134.0;
   private static final double CONVERTER_EFFICIENCY = 0.935;
   private static final double VOLUME_PER_CONVERSION = 10000;
 
-  /* Volumes listed are per day per person. */
+  /* Volume listed is per day per person. */
   private static final double DAILY_MAXIMUM_VOLUME_USABLE = 10;
   private static final double VOLUME_PER_GENERATION = 4.128;
 
   private final Map<Integer, Human> allHumans = new HashMap<>();
   private final SmartWaterTank centralWaterTank;
+  private final CropWaterTank cropWaterTank;
   private final WaterTank wasteWaterTank;
   private final WaterGenerator productionUnit;
   private final WaterConverter waterRecycler;
@@ -54,6 +57,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     this.randomInst = new Random(42);
 
     /* Initialise tank entities. */
+    cropWaterTank = new CropWaterTank(CROP_EFFICIENCY);
     centralWaterTank = new SmartWaterTank(
         DAILY_MAXIMUM_VOLUME_USABLE * population);
     wasteWaterTank = new LowQualityWaterTank();

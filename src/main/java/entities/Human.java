@@ -16,29 +16,30 @@ public class Human {
   /* Tracks whether this human has satisfied each component at the end
    * of the day. If yes, increase its standard of living by the component's
    * importance factor. */
-  private final Map<WaterUseCase, Boolean> componentFulfilled = new HashMap<>();
+  private final Map<WaterUseCase, Boolean> componentSatisfaction = new HashMap<>();
   private final WaterTank potableWaterTank;
   private final WaterTank wasteWaterTank;
+  private final WaterTank cropWaterTank;
   private int humanId;
   private double standardOfLiving = INITIAL_SOL_VALUE;
 
-  public Human(WaterTank potableWaterTank, WaterTank wasteWaterTank) {
+  public Human(WaterTank potableWaterTank, WaterTank wasteWaterTank, WaterTank cropWaterTank) {
     this.potableWaterTank = potableWaterTank;
     this.wasteWaterTank = wasteWaterTank;
-
-    resetComponents();
+    this.cropWaterTank = cropWaterTank;
+    resetComponentSatisfaction();
   }
 
   /* Human starts the day satisfied with each component. */
-  public void resetComponents() {
+  public void resetComponentSatisfaction() {
     for (WaterUseCase useCase : WaterUseCase.values()) {
-      componentFulfilled.put(useCase, true);
+      componentSatisfaction.put(useCase, true);
     }
   }
 
   /* Calculate end of day SOL based on satisfaction in each component. */
   public void calculateEndOfDaySOL() {
-    for (Map.Entry<WaterUseCase, Boolean> entry : componentFulfilled.entrySet()) {
+    for (Map.Entry<WaterUseCase, Boolean> entry : componentSatisfaction.entrySet()) {
       if (entry.getValue()) {
         /* Component was satisfied, so we can add to the SOL. */
         standardOfLiving += entry.getKey().getImportance();
@@ -77,7 +78,7 @@ public class Human {
               * importance / useCase.getDailyFrequency();
       standardOfLiving = Math.max(standardOfLiving, 0);
 
-      componentFulfilled.put(useCase, false);
+      componentSatisfaction.put(useCase, false);
 //      System.out.printf("Insufficient water for %s! for Blob %d%n", useCase.name(), humanId);
     }
 
@@ -85,7 +86,7 @@ public class Human {
     standardOfLiving = Math.min(standardOfLiving, MAX_SOL_VALUE);
 
     /* Special case if medical usage is not fulfilled. */
-    if (useCase.equals(MEDICAL) && !componentFulfilled.get(MEDICAL)) {
+    if (useCase.equals(MEDICAL) && !componentSatisfaction.get(MEDICAL)) {
       standardOfLiving = 0;
     }
   }
@@ -111,5 +112,9 @@ public class Human {
 
   public void excreteWaste(double volume) {
     wasteWaterTank.depositWater(volume);
+  }
+
+  public void eatFood(double volume) {
+    cropWaterTank.withdrawWater(volume);
   }
 }
