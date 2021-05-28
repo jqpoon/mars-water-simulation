@@ -15,6 +15,7 @@ public class Human {
 
   private final WaterTank potableWaterTank;
   private final WaterTank wasteWaterTank;
+  private int humanId;
   private double standardOfLiving = INITIAL_SOL_VALUE;
 
   public Human(WaterTank potableWaterTank, WaterTank wasteWaterTank) {
@@ -28,6 +29,10 @@ public class Human {
     importanceFactors.put(ELECTROLYSIS, ELECTROLYSIS_IMPORTANCE);
     importanceFactors.put(MEDICAL, MEDICAL_IMPORTANCE);
     importanceFactors.put(LAUNDRY, LAUNDRY_IMPORTANCE);
+  }
+
+  public void setHumanId(int humanId) {
+    this.humanId = humanId;
   }
 
   public double getStandardOfLiving() {
@@ -55,7 +60,7 @@ public class Human {
           (volumeRequested - volumeDrank) / volumeRequested * importance;
       standardOfLiving = Math.max(standardOfLiving, 0);
 
-      System.out.printf("Insufficient water for %s!%n", useCase.name());
+//      System.out.printf("Insufficient water for %s! for Blob %d%n", useCase.name(), humanId);
     } else {
       standardOfLiving += importance;
     }
@@ -70,14 +75,17 @@ public class Human {
 
   public void shower(double volume) {
     useWater(HYGIENE, volume);
+    wasteWaterTank.depositWater(volume);
   }
 
   public void flush(double volume) {
     useWater(FLUSH, volume);
+    wasteWaterTank.depositWater(volume);
   }
 
   public void medicalUse(double volume) {
     useWater(MEDICAL, volume);
+    /* All water used for medical purposes is lost. */
   }
 
   public void excreteWaste(double volume) {
