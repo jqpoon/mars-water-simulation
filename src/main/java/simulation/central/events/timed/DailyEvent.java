@@ -1,5 +1,6 @@
 package simulation.central.events.timed;
 
+import static entities.WaterUseCase.*;
 import static simulation.central.CentralSystemSim.HOURS_IN_A_DAY;
 
 import simulation.central.CentralSystemSim;
@@ -46,7 +47,7 @@ public class DailyEvent implements Event<CentralSystemSim> {
   /* Schedule 10 random drink water events for each human everyday. */
   private void scheduleRandomDrinkEvents(CentralSystemSim simulation) {
     for (int humanId = 0; humanId < simulation.getPopulation(); humanId++) {
-      for (int j = 0; j < simulation.DRINK_FREQUENCY; j++) {
+      for (int j = 0; j < DRINK.getDailyFrequency(); j++) {
         double randomTimeOffset = simulation.getRandomDouble() * HOURS_IN_A_DAY;
         simulation.schedule(new DrinkWaterEvent(humanId),
             simulation.getCurrentTime() + randomTimeOffset);
@@ -73,7 +74,7 @@ public class DailyEvent implements Event<CentralSystemSim> {
   /* Schedule a shower event twice a day per human. */
   private void scheduleShowerEvents(CentralSystemSim simulation) {
     for (int humanId = 0; humanId < simulation.getPopulation(); humanId++) {
-      for (int j = 0; j < simulation.SHOWER_FREQUENCY; j++) {
+      for (int j = 0; j < HYGIENE.getDailyFrequency(); j++) {
         double randomTimeOffset = simulation.getRandomDouble() * HOURS_IN_A_DAY;
         simulation.schedule(new ShowerEvent(humanId),
             simulation.getCurrentTime() + randomTimeOffset);

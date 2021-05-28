@@ -30,11 +30,6 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   private static final double DAILY_MAXIMUM_VOLUME_USABLE = 10;
   private static final double VOLUME_PER_GENERATION = 4.128;
 
-  /* Frequency of events. If not listed, this event is scheduled
-   * once a day. */
-  public final int DRINK_FREQUENCY = 10;
-  public final int SHOWER_FREQUENCY = 2;
-
   private final Map<Integer, Human> allHumans = new HashMap<>();
   private final SmartWaterTank centralWaterTank;
   private final WaterTank wasteWaterTank;

@@ -18,6 +18,6 @@ public class ShowerEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     simulation.getHumanById(humanId)
-        .shower(HYGIENE_VOLUME / simulation.SHOWER_FREQUENCY);
+        .shower(HYGIENE.getDailyVolume() / HYGIENE.getDailyFrequency());
   }
 }

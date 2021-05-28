@@ -1,7 +1,8 @@
 package simulation.central.events.human;
 
+import static entities.WaterUseCase.*;
+
 import entities.Human;
-import entities.WaterUseCase;
 import simulation.central.CentralSystemSim;
 import simulation.framework.Event;
 
@@ -18,7 +19,7 @@ public class ExcreteWasteEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     Human human = simulation.getHumanById(humanId);
-    human.excreteWaste(WaterUseCase.DRINK_VOLUME / simulation.DRINK_FREQUENCY);
+    human.excreteWaste(DRINK.getDailyVolume() / DRINK.getDailyFrequency());
 //    System.out.printf("Blob tried going to toilet at: %.4f%n", simulation.getCurrentTime());
 
     simulation.schedule(new FlushEvent(humanId), simulation.getCurrentTime());

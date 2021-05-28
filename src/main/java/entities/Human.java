@@ -13,6 +13,11 @@ public class Human {
   public static final double MAX_SOL_VALUE = 10;
   private final Map<WaterUseCase, Double> importanceFactors = new HashMap<>();
 
+  /* Tracks whether this human has satisfied each component at the end
+   * of the day. If yes, increase its standard of living by the component's
+   * importance factor. */
+  private final Map<WaterUseCase, Boolean> componentFulfilled = new HashMap<>();
+
   private final WaterTank potableWaterTank;
   private final WaterTank wasteWaterTank;
   private int humanId;
@@ -22,13 +27,9 @@ public class Human {
     this.potableWaterTank = potableWaterTank;
     this.wasteWaterTank = wasteWaterTank;
 
-    importanceFactors.put(DRINK, DRINK_IMPORTANCE);
-    importanceFactors.put(CROP, FOOD_IMPORTANCE);
-    importanceFactors.put(HYGIENE, HYGIENE_IMPORTANCE);
-    importanceFactors.put(FLUSH, FLUSH_IMPORTANCE);
-    importanceFactors.put(ELECTROLYSIS, ELECTROLYSIS_IMPORTANCE);
-    importanceFactors.put(MEDICAL, MEDICAL_IMPORTANCE);
-    importanceFactors.put(LAUNDRY, LAUNDRY_IMPORTANCE);
+    for (WaterUseCase useCase : WaterUseCase.values()) {
+      importanceFactors.put(useCase, useCase.getImportance());
+    }
   }
 
   public void setHumanId(int humanId) {
@@ -55,14 +56,13 @@ public class Human {
       volumeDrank = potableWaterTank.withdrawWater(volumeRequested);
     }
 
+    /* Calculate new standard of living accordingly. */
     if (volumeDrank != volumeRequested) {
       standardOfLiving -=
           (volumeRequested - volumeDrank) / volumeRequested * importance;
       standardOfLiving = Math.max(standardOfLiving, 0);
 
 //      System.out.printf("Insufficient water for %s! for Blob %d%n", useCase.name(), humanId);
-    } else {
-      standardOfLiving += importance;
     }
 
     /* Cap standard of living to a certain value. */
