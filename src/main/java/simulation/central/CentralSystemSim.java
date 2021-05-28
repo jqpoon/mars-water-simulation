@@ -47,6 +47,12 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
       double flushPercentage, double medicalPercentage,
       double electrolysisPercentage) {
 
+    /* Check percentages sum to one. */
+    if (drinkingPercentage + cropPercentage + hygienePercentage + laundryPercentage + flushPercentage + medicalPercentage + electrolysisPercentage != 1) {
+      System.out.println("Percentages don't sum to one!");
+      System.exit(1);
+    }
+
     /* Initialise simulation related fields. */
     this.randomInst = new Random(42);
 
@@ -82,6 +88,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
         electrolysisPercentage);
   }
 
+  /* ------------ Domain related functions ------------ */
   public int getPopulation() {
     return population;
   }
@@ -109,6 +116,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     productionUnit.generate();
   }
 
+  /* ------------ Simulation related functions ------------ */
   @Override
   protected boolean stop() {
     /* Simulation only stops after a certain number of days */
@@ -125,9 +133,26 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     schedule(new DailyEvent(), 0);
   }
 
+  public void printStatistics() {
+    double averageStandardOfLiving = allHumans.values().stream()
+        .mapToDouble(Human::getStandardOfLiving)
+        .reduce(Double::sum)
+        .getAsDouble() / population;
+    System.out.printf("Average SOL: %.2f%n", averageStandardOfLiving);
+  }
+
   public static void main(String[] args) {
-    CentralSystemSim simulation = new CentralSystemSim(0.4, 0.1, 0.1, 0.1, 0.1,
-        0.1, 0.2);
+    double drinkingPercentage = 0.1;
+    double cropPercentage = 0.1;
+    double hygienePercentage = 0.1;
+    double laundryPercentage = 0.1;
+    double flushPercentage = 0.1;
+    double medicalPercentage = 0.1;
+    double electrolysisPercentage = 0.4;
+    CentralSystemSim simulation = new CentralSystemSim(drinkingPercentage,
+        cropPercentage, hygienePercentage, laundryPercentage, flushPercentage,
+        medicalPercentage, electrolysisPercentage);
+
     simulation.initSimulation();
     simulation.simulate();
   }

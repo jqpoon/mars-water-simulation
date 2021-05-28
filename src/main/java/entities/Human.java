@@ -27,6 +27,7 @@ public class Human {
     importanceFactors.put(FLUSH, FLUSH_IMPORTANCE);
     importanceFactors.put(ELECTROLYSIS, ELECTROLYSIS_IMPORTANCE);
     importanceFactors.put(MEDICAL, MEDICAL_IMPORTANCE);
+    importanceFactors.put(LAUNDRY, LAUNDRY_IMPORTANCE);
   }
 
   public double getStandardOfLiving() {
