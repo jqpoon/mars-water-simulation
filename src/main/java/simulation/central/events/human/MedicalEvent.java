@@ -18,7 +18,7 @@ public class MedicalEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     double volumeRequired =
-        simulation.getRandomInst().nextDouble() * RANGE + MIN_VALUE;
+        simulation.getRandomDouble() * RANGE + MIN_VALUE;
     simulation.getHumanById(humanId).medicalUse(volumeRequired);
   }
 }

@@ -22,7 +22,7 @@ public class DrinkWaterEvent implements Event<CentralSystemSim> {
     human.drink(WaterUseCase.DRINK_VOLUME / simulation.DRINK_FREQUENCY);
 
     /* Wait some time before going to the toilet. */
-    double waitTime = simulation.getRandomInst().nextFloat();
+    double waitTime = simulation.getRandomDouble();
     simulation.schedule(new ExcreteWasteEvent(humanId),
         waitTime + simulation.getCurrentTime());
   }

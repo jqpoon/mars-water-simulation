@@ -93,8 +93,8 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     return population;
   }
 
-  public Random getRandomInst() {
-    return randomInst;
+  public double getRandomDouble() {
+    return randomInst.nextDouble();
   }
 
   public WaterConverter getWaterRecycler() {
@@ -137,7 +137,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     double averageStandardOfLiving = allHumans.values().stream()
         .mapToDouble(Human::getStandardOfLiving)
         .reduce(Double::sum)
-        .getAsDouble() / population;
+        .orElseThrow() / population;
     System.out.printf("Average SOL: %.2f%n", averageStandardOfLiving);
   }
 
