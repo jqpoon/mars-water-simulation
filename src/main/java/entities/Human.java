@@ -8,7 +8,8 @@ import java.util.Map;
 
 public class Human {
 
-  public static final double INITIAL_SOL_VALUE = 7;
+  public static final double INITIAL_SOL_VALUE = 5;
+  public static final double MAX_SOL_VALUE = 10;
   private final Map<WaterUseCase, Double> importanceFactors = new HashMap<>();
 
   private final WaterTank potableWaterTank;
@@ -34,15 +35,20 @@ public class Human {
 
   /* Attempts to use water from the potable water tank. If unable to use
    * the requested amount, then reduce SoL scaled to a constant. */
-  private void useWater(WaterUseCase useCase, double volume) {
-    double volumeDrank = potableWaterTank.withdrawWater(volume);
-    if (volumeDrank != volume) {
-      standardOfLiving -= (volume - volumeDrank) / volume * WaterUseCase.DRINK_IMPORTANCE;
+  private void useWater(WaterUseCase useCase, double volumeRequested) {
+
+    double importance = importanceFactors.get(useCase);
+    double volumeDrank = potableWaterTank.withdrawWater(volumeRequested);
+
+    if (volumeDrank != volumeRequested) {
+      standardOfLiving -= (volumeRequested - volumeDrank) / volumeRequested * importance;
       standardOfLiving = Math.max(standardOfLiving, 0);
 
       System.out.printf(
           "Insufficient water for %s! Current standard of living: %.02f%n",
           useCase.name(), standardOfLiving);
+    } else {
+      standardOfLiving += importance;
     }
   }
 

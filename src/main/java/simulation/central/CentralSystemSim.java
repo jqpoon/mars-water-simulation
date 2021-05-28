@@ -19,20 +19,20 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   public static final int HOURS_IN_A_DAY = 24;
 
   /* Simulation parameters. */
-  private final int POPULATION = 1;
-  private final int NO_OF_SIMULATION_DAYS = 1;
+  private final int population = 1;
+  private final int simulationDayCount = 1;
 
-  private static final double VOLUME_PER_GENERATION = 4.128;
   private static final double CONVERTER_EFFICIENCY = 0.935;
   private static final double VOLUME_PER_CONVERSION = 10000;
 
   /* Volumes listed are per day per person. */
   private static final double DAILY_MAXIMUM_VOLUME_USABLE = 10;
+  private static final double VOLUME_PER_GENERATION = 4.128;
 
   /* Frequency of events. If not listed, this event is scheduled
    * once a day. */
   public final int DRINK_FREQUENCY = 10;
-  public final int HYGIENE_FREQUENCY = 2;
+  public final int SHOWER_FREQUENCY = 2;
 
   private final Map<Integer, Human> allHumans = new HashMap<>();
   private final SmartWaterTank centralWaterTank;
@@ -53,16 +53,16 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     centralWaterTank = new SmartWaterTank(DAILY_MAXIMUM_VOLUME_USABLE);
     wasteWaterTank = new LowQualityWaterTank();
     productionUnit = new WaterGenerator(centralWaterTank,
-        VOLUME_PER_GENERATION);
+        VOLUME_PER_GENERATION * population);
     waterRecycler = new WaterConverterBuilder()
         .withEfficiency(CONVERTER_EFFICIENCY)
         .withSourceTank(wasteWaterTank)
         .withDestinationTank(centralWaterTank)
-        .withVolumePerConversion(VOLUME_PER_CONVERSION)
+        .withVolumePerConversion(VOLUME_PER_CONVERSION * population)
         .build();
 
     /* Create humans. */
-    for (int i = 0; i < POPULATION; i++) {
+    for (int i = 0; i < population; i++) {
       Human human = new HumanBuilder()
           .withPotableWaterTank(centralWaterTank)
           .withWasteWaterTank(wasteWaterTank)
@@ -82,14 +82,10 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   }
 
   public int getPopulation() {
-    return POPULATION;
+    return population;
   }
   public Random getRandomInst() {
     return randomInst;
-  }
-
-  public WaterGenerator getProductionUnit() {
-    return productionUnit;
   }
 
   public WaterConverter getWaterRecycler() {
@@ -100,14 +96,20 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     return allHumans.get(id);
   }
 
-  public double useWaterFromCentralTank(WaterUseCase useCase, double volume) {
-    return centralWaterTank.withdrawWaterWithReason(volume, useCase);
+  /* Should only be used for *colony* wide events, not human specific events. */
+  public void useWaterFromCentralTank(WaterUseCase useCase, double volume) {
+    centralWaterTank.withdrawWaterWithReason(volume, useCase);
+    // todo: lower SOL
+  }
+
+  public void generateWater() {
+    productionUnit.generate();
   }
 
   @Override
   protected boolean stop() {
     /* Simulation only stops after a certain number of days */
-    return getCurrentTime() > HOURS_IN_A_DAY * NO_OF_SIMULATION_DAYS;
+    return getCurrentTime() > HOURS_IN_A_DAY * simulationDayCount;
   }
 
   @Override
