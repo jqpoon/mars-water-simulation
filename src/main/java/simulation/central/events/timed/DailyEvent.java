@@ -8,12 +8,14 @@ import simulation.central.events.colony.GenerateWaterEvent;
 import simulation.central.events.colony.GrowCropsEvent;
 import simulation.central.events.colony.LaundryEvent;
 import simulation.central.events.colony.RecycleWaterEvent;
-import simulation.central.events.human.DrinkWaterEvent;
-import simulation.central.events.human.MedicalEvent;
-import simulation.central.events.human.ShowerEvent;
+import simulation.central.events.individual.DrinkWaterEvent;
+import simulation.central.events.individual.MedicalEvent;
+import simulation.central.events.individual.ShowerEvent;
 import simulation.framework.Event;
 
 public class DailyEvent implements Event<CentralSystemSim> {
+
+  private static final double MEDICAL_CHANCE = 0.01;
 
   @Override
   public void invoke(CentralSystemSim simulation) {
@@ -65,7 +67,7 @@ public class DailyEvent implements Event<CentralSystemSim> {
    * 0.01, 0.2-1L each time. */
   private void scheduleRandomMedicalEvent(CentralSystemSim simulation) {
     for (int humanId = 0; humanId < simulation.getPopulation(); humanId++) {
-      if (simulation.getRandomDouble() < 0.01) {
+      if (simulation.getRandomDouble() < MEDICAL_CHANCE) {
         simulation.schedule(new MedicalEvent(humanId),
             simulation.getCurrentTime());
       }

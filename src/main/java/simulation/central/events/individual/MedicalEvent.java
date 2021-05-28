@@ -1,4 +1,4 @@
-package simulation.central.events.human;
+package simulation.central.events.individual;
 
 import simulation.central.CentralSystemSim;
 import simulation.framework.Event;
