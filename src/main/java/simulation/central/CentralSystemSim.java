@@ -48,7 +48,9 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
       double electrolysisPercentage) {
 
     /* Check percentages sum to one. */
-    if (drinkingPercentage + cropPercentage + hygienePercentage + laundryPercentage + flushPercentage + medicalPercentage + electrolysisPercentage != 1) {
+    if (drinkingPercentage + cropPercentage + hygienePercentage
+        + laundryPercentage + flushPercentage + medicalPercentage
+        + electrolysisPercentage != 1) {
       System.out.println("Percentages don't sum to one!");
       System.exit(1);
     }
@@ -57,7 +59,8 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     this.randomInst = new Random(42);
 
     /* Initialise tank entities. */
-    centralWaterTank = new SmartWaterTank(DAILY_MAXIMUM_VOLUME_USABLE);
+    centralWaterTank = new SmartWaterTank(
+        DAILY_MAXIMUM_VOLUME_USABLE * population);
     wasteWaterTank = new LowQualityWaterTank();
     productionUnit = new WaterGenerator(centralWaterTank,
         VOLUME_PER_GENERATION * population);
@@ -74,6 +77,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
           .withPotableWaterTank(centralWaterTank)
           .withWasteWaterTank(wasteWaterTank)
           .build();
+      human.setHumanId(i);
       allHumans.put(i, human);
     }
 
@@ -138,6 +142,8 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
         .mapToDouble(Human::getStandardOfLiving)
         .reduce(Double::sum)
         .orElseThrow() / population;
+    System.out.printf("Clean water: %.2f%n", centralWaterTank.getCurrentVolume());
+    System.out.printf("Waste water: %.2f%n", wasteWaterTank.getCurrentVolume());
     System.out.printf("Average SOL: %.2f%n", averageStandardOfLiving);
 //    centralWaterTank.printWaterAvailable();
   }
