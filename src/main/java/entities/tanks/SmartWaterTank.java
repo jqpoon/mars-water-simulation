@@ -16,8 +16,14 @@ public class SmartWaterTank extends AbstractWaterTank {
     this.maximumDailyVolume = maximumDailyVolume;
   }
 
+  /* If there is any unused water allocated to a certain use case at the end
+   * of the day, we want to add this to next day's quota. */
   public void resetLimit() {
-    currentWaterAvailable = new HashMap<>(originalWaterDistribution);
+    for (Map.Entry<WaterUseCase, Double> entry : originalWaterDistribution.entrySet()) {
+      double volumeToAdd = entry.getValue();
+      double currentVolumeLeft = currentWaterAvailable.get(entry.getKey());
+      currentWaterAvailable.put(entry.getKey(), currentVolumeLeft + volumeToAdd);
+    }
   }
 
   public void addUseCase(WaterUseCase useCase, double percentage) {
@@ -32,19 +38,14 @@ public class SmartWaterTank extends AbstractWaterTank {
 
   /* Instead of a normal withdrawal, ensure that we stick to the limits
    * as defined by water use case. */
-  public double withdrawWaterWithReason(double volume, WaterUseCase reason) {
+  public double withdrawWaterWithReason(double volumeRequested, WaterUseCase reason) {
     double volumeLeft = currentWaterAvailable.get(reason);
 
     /* Remove volume we have withdrawn from our water available. */
-    currentWaterAvailable.put(reason, Math.max(volumeLeft - volume, 0));
+    currentWaterAvailable.put(reason, Math.max(volumeLeft - volumeRequested, 0));
 
-    /* Limit reached. */
-    if (volumeLeft < volume) {
-      return 0;
-    }
-
-    /* Else withdraw as per normal. */
-    return withdrawWater(volume);
+    /* Withdraw up to the maximum allocated only. */
+    return withdrawWater(Math.min(volumeRequested, volumeLeft));
   }
 
   public void printWaterAvailable() {

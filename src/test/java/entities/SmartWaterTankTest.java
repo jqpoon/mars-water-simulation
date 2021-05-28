@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 public class SmartWaterTankTest {
 
   private static final double MAX_DAILY_VOLUME = 50;
+  private static final double MAX_DRINK = MAX_DAILY_VOLUME * 0.4;
   SmartWaterTank waterTank;
 
   @BeforeEach
@@ -25,19 +26,30 @@ public class SmartWaterTankTest {
   }
 
   @Test
+  public void returnsMaximumEvenIfWeRequestForMore() {
+    assertEquals(MAX_DRINK,
+        waterTank.withdrawWaterWithReason(MAX_DRINK * 2, WaterUseCase.DRINK));
+  }
+
+  @Test
   public void waterTankCanOnlyWithdrawUpToLimit() {
-    double maximumDrink = MAX_DAILY_VOLUME * 0.4;
-    waterTank.withdrawWaterWithReason(maximumDrink, WaterUseCase.DRINK);
+    waterTank.withdrawWaterWithReason(MAX_DRINK, WaterUseCase.DRINK);
     assertEquals(0, waterTank.withdrawWaterWithReason(5, WaterUseCase.DRINK));
   }
 
   @Test
   public void canContinueWithdrawingAfterReset() {
-    double maximumDrink = MAX_DAILY_VOLUME * 0.4;
-    waterTank.withdrawWaterWithReason(maximumDrink, WaterUseCase.DRINK);
-    waterTank.withdrawWaterWithReason(maximumDrink, WaterUseCase.DRINK);
+    waterTank.withdrawWaterWithReason(MAX_DRINK, WaterUseCase.DRINK);
+    waterTank.withdrawWaterWithReason(MAX_DRINK, WaterUseCase.DRINK);
     waterTank.resetLimit();
     assertEquals(5, waterTank.withdrawWaterWithReason(5, WaterUseCase.DRINK));
+  }
+
+  @Test
+  public void resettingTankAddsToNextLimit() {
+    waterTank.resetLimit();
+    assertEquals(MAX_DRINK * 2, waterTank
+        .withdrawWaterWithReason(MAX_DRINK * 2, WaterUseCase.DRINK));
   }
 
 }
