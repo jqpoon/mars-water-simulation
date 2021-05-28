@@ -35,7 +35,7 @@ public class Human {
 
   /* Attempts to use water from the potable water tank. If unable to use
    * the requested amount, then reduce SoL scaled to a constant. */
-  private void useWater(WaterUseCase useCase, double volumeRequested) {
+  public void useWater(WaterUseCase useCase, double volumeRequested) {
 
     double importance = importanceFactors.get(useCase);
     double volumeDrank;
@@ -63,27 +63,25 @@ public class Human {
 
     /* Cap standard of living to a certain value. */
     standardOfLiving = Math.min(standardOfLiving, MAX_SOL_VALUE);
-
   }
 
   public void drink(double volume) {
-    useWater(WaterUseCase.DRINK, volume);
+    useWater(DRINK, volume);
   }
 
   public void shower(double volume) {
-    useWater(WaterUseCase.HYGIENE, volume);
+    useWater(HYGIENE, volume);
   }
 
   public void flush(double volume) {
-    useWater(WaterUseCase.FLUSH, volume);
+    useWater(FLUSH, volume);
   }
 
   public void medicalUse(double volume) {
-    useWater(WaterUseCase.MEDICAL, volume);
+    useWater(MEDICAL, volume);
   }
 
   public void excreteWaste(double volume) {
     wasteWaterTank.depositWater(volume);
   }
-
 }

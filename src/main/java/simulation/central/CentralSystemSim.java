@@ -12,6 +12,7 @@ import entities.tanks.WaterTank;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import simulation.central.events.timed.DailyEvent;
 import simulation.framework.Simulation;
 
 public class CentralSystemSim extends Simulation<CentralSystemSim> {
@@ -84,6 +85,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   public int getPopulation() {
     return population;
   }
+
   public Random getRandomInst() {
     return randomInst;
   }
@@ -98,8 +100,9 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   /* Should only be used for *colony* wide events, not human specific events. */
   public void useWaterFromCentralTank(WaterUseCase useCase, double volume) {
-    centralWaterTank.withdrawWaterWithReason(volume, useCase);
-    // todo: lower SOL
+    for (Human human : allHumans.values()) {
+      human.useWater(useCase, volume / population);
+    }
   }
 
   public void generateWater() {
@@ -109,7 +112,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   @Override
   protected boolean stop() {
     /* Simulation only stops after a certain number of days */
-    return getCurrentTime() > HOURS_IN_A_DAY * simulationDayCount;
+    return getCurrentTime() >= HOURS_IN_A_DAY * simulationDayCount;
   }
 
   @Override
@@ -119,11 +122,14 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   @Override
   protected void initSimulation() {
-
+    schedule(new DailyEvent(), 0);
   }
 
   public static void main(String[] args) {
-
+    CentralSystemSim simulation = new CentralSystemSim(0.4, 0.1, 0.1, 0.1, 0.1,
+        0.1, 0.2);
+    simulation.initSimulation();
+    simulation.simulate();
   }
 
 }
