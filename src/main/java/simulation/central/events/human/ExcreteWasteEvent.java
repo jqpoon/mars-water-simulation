@@ -1,4 +1,4 @@
-package simulation.central.events;
+package simulation.central.events.human;
 
 import entities.Human;
 import entities.WaterUseCase;

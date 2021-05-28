@@ -24,7 +24,6 @@ public class Human {
     importanceFactors.put(DRINK, DRINK_IMPORTANCE);
     importanceFactors.put(CROP, FOOD_IMPORTANCE);
     importanceFactors.put(HYGIENE, HYGIENE_IMPORTANCE);
-    importanceFactors.put(LAUNDRY, LAUNDRY_IMPORTANCE);
     importanceFactors.put(FLUSH, FLUSH_IMPORTANCE);
     importanceFactors.put(ELECTROLYSIS, ELECTROLYSIS_IMPORTANCE);
     importanceFactors.put(MEDICAL, MEDICAL_IMPORTANCE);
@@ -61,6 +60,10 @@ public class Human {
     } else {
       standardOfLiving += importance;
     }
+
+    /* Cap standard of living to a certain value. */
+    standardOfLiving = Math.min(standardOfLiving, MAX_SOL_VALUE);
+
   }
 
   public void drink(double volume) {
@@ -69,10 +72,6 @@ public class Human {
 
   public void shower(double volume) {
     useWater(WaterUseCase.HYGIENE, volume);
-  }
-
-  public void doLaundry(double volume) {
-    useWater(WaterUseCase.LAUNDRY, volume);
   }
 
   public void flush(double volume) {
