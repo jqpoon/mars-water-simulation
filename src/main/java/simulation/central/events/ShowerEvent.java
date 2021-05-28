@@ -9,8 +9,14 @@ import simulation.framework.Event;
  * This event is scheduled SHOWER_FREQUENCY times a day per human. */
 public class ShowerEvent implements Event<CentralSystemSim> {
 
+  private final int humanId;
+
+  public ShowerEvent(int humanId) {
+    this.humanId = humanId;
+  }
+
   @Override
   public void invoke(CentralSystemSim simulation) {
-    simulation.useWaterFromCentralTank(HYGIENE, HYGIENE_VOLUME);
+    simulation.getHumanById(humanId).shower(HYGIENE_VOLUME);
   }
 }

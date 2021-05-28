@@ -2,6 +2,7 @@ package entities;
 
 import static entities.WaterUseCase.*;
 
+import entities.tanks.SmartWaterTank;
 import entities.tanks.WaterTank;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +39,20 @@ public class Human {
   private void useWater(WaterUseCase useCase, double volumeRequested) {
 
     double importance = importanceFactors.get(useCase);
-    double volumeDrank = potableWaterTank.withdrawWater(volumeRequested);
+    double volumeDrank;
+
+    /* Potential for refactor here. How to deal with smart water tanks
+     * with a specific method call? */
+    if (potableWaterTank instanceof SmartWaterTank) {
+      volumeDrank = ((SmartWaterTank) potableWaterTank)
+          .withdrawWaterWithReason(volumeRequested, useCase);
+    } else {
+      volumeDrank = potableWaterTank.withdrawWater(volumeRequested);
+    }
 
     if (volumeDrank != volumeRequested) {
-      standardOfLiving -= (volumeRequested - volumeDrank) / volumeRequested * importance;
+      standardOfLiving -=
+          (volumeRequested - volumeDrank) / volumeRequested * importance;
       standardOfLiving = Math.max(standardOfLiving, 0);
 
       System.out.printf(

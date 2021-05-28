@@ -10,9 +10,15 @@ import simulation.framework.Event;
  * excrete waste event, which itself is scheduled after a drink event. */
 public class FlushEvent implements Event<CentralSystemSim> {
 
+  private final int humanId;
+
+  public FlushEvent(int humanId) {
+    this.humanId = humanId;
+  }
+
   @Override
   public void invoke(CentralSystemSim simulation) {
-    simulation.useWaterFromCentralTank(FLUSH,
-        FLUSH_VOLUME / simulation.DRINK_FREQUENCY);
+    simulation.getHumanById(humanId)
+        .flush(FLUSH_VOLUME / simulation.DRINK_FREQUENCY);
   }
 }

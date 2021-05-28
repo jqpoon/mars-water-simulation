@@ -1,4 +1,4 @@
-package simulation.central.events;
+package simulation.central.events.colony;
 
 import static entities.WaterUseCase.*;
 

@@ -1,7 +1,7 @@
 package simulation.central.events.timed;
 
 import simulation.central.CentralSystemSim;
-import simulation.central.events.GenerateWaterEvent;
+import simulation.central.events.colony.GenerateWaterEvent;
 import simulation.framework.Event;
 
 public class DailyEvent implements Event<CentralSystemSim> {

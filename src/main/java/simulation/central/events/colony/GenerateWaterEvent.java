@@ -1,4 +1,4 @@
-package simulation.central.events;
+package simulation.central.events.colony;
 
 import simulation.central.CentralSystemSim;
 import simulation.framework.Event;
