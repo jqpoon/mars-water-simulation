@@ -5,7 +5,7 @@ public enum WaterUseCase {
   CROP(1.34, 0.75, 2),
   HYGIENE(0.428, 0.4, 2),
   FLUSH(7.33, 0.35, Frequency.DRINK_FREQUENCY),
-  MEDICAL(0.0535, 1, 1),
+  MEDICAL(0.0535, 0, 0),
   LAUNDRY(7.33, 0.3, 1),
   ELECTROLYSIS(2.663, 1.2, 24);
 

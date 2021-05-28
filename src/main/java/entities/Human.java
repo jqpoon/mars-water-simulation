@@ -83,6 +83,11 @@ public class Human {
 
     /* Cap standard of living to a certain value. */
     standardOfLiving = Math.min(standardOfLiving, MAX_SOL_VALUE);
+
+    /* Special case if medical usage is not fulfilled. */
+    if (useCase.equals(MEDICAL) && !componentFulfilled.get(MEDICAL)) {
+      standardOfLiving = 0;
+    }
   }
 
   public void drink(double volume) {
