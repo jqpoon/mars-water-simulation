@@ -18,7 +18,7 @@ public class DrinkWaterEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     Human human = simulation.getHumanById(humanId);
-    System.out.printf("%d Tried drinking water at: %.4f%n", humanId, simulation.getCurrentTime());
+//    System.out.printf("Blob %d Tried drinking water at: %.4f%n", humanId, simulation.getCurrentTime());
     human.drink(WaterUseCase.DRINK_VOLUME / simulation.DRINK_FREQUENCY);
 
     /* Wait some time before going to the toilet. */

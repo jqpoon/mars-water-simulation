@@ -19,7 +19,7 @@ public class ExcreteWasteEvent implements Event<CentralSystemSim> {
   public void invoke(CentralSystemSim simulation) {
     Human human = simulation.getHumanById(humanId);
     human.excreteWaste(WaterUseCase.DRINK_VOLUME / simulation.DRINK_FREQUENCY);
-    System.out.printf("Tried going to toilet at: %.4f%n", simulation.getCurrentTime());
+//    System.out.printf("Blob tried going to toilet at: %.4f%n", simulation.getCurrentTime());
 
     simulation.schedule(new FlushEvent(humanId), simulation.getCurrentTime());
   }
