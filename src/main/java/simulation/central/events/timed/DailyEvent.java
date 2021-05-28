@@ -5,6 +5,7 @@ import static simulation.central.CentralSystemSim.HOURS_IN_A_DAY;
 
 import simulation.central.CentralSystemSim;
 import simulation.central.events.colony.GenerateWaterEvent;
+import simulation.central.events.colony.GrowCropsEvent;
 import simulation.central.events.colony.LaundryEvent;
 import simulation.central.events.colony.RecycleWaterEvent;
 import simulation.central.events.human.DrinkWaterEvent;
@@ -71,9 +72,12 @@ public class DailyEvent implements Event<CentralSystemSim> {
     }
   }
 
-  /* Water crops for entire colony, once a day. */
+  /* Schedule watering of crops twice a day. Colony-wide event. */
   private void scheduleCropEvent(CentralSystemSim simulation) {
-
+    for (int i = 0; i < CROP.getDailyFrequency(); i++) {
+      double randomTimeOffset = simulation.getRandomDouble() * HOURS_IN_A_DAY;
+      simulation.schedule(new GrowCropsEvent(), simulation.getCurrentTime() + randomTimeOffset);
+    }
   }
 
   /* Schedule a shower event twice a day per human. */

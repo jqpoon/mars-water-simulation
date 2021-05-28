@@ -6,8 +6,8 @@ import entities.Human;
 import simulation.central.CentralSystemSim;
 import simulation.framework.Event;
 
-/* Human drinks water and excretes that water some time later. This event
- * is scheduled DRINK_FREQUENCY times everyday at random times. */
+/* Human drinks water and eats and excretes that water some time later.
+ * This event is scheduled DRINK_FREQUENCY times everyday at random times. */
 public class DrinkWaterEvent implements Event<CentralSystemSim> {
 
   private final int humanId;
@@ -19,8 +19,8 @@ public class DrinkWaterEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     Human human = simulation.getHumanById(humanId);
-//    System.out.printf("Blob %d Tried drinking water at: %.4f%n", humanId, simulation.getCurrentTime());
     human.drink(DRINK.getDailyVolume() / DRINK.getDailyFrequency());
+    human.eatFood(EAT.getDailyVolume() / EAT.getDailyFrequency());
 
     /* Wait some time before going to the toilet. */
     double waitTime = simulation.getRandomDouble();

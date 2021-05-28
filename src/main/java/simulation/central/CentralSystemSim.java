@@ -24,7 +24,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   private final int population = 1;
   private final int simulationDayCount = 1;
 
-  private static final double CROP_EFFICIENCY = 88.0/134.0;
+  private static final double CROP_EFFICIENCY = 88.0 / 134.0;
   private static final double CONVERTER_EFFICIENCY = 0.935;
   private static final double VOLUME_PER_CONVERSION = 10000;
 
@@ -45,13 +45,19 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
       double flushPercentage, double medicalPercentage,
       double electrolysisPercentage) {
 
-    /* Check percentages sum to one. */
-    if (drinkingPercentage + cropPercentage + hygienePercentage
-        + laundryPercentage + flushPercentage + medicalPercentage
-        + electrolysisPercentage != 1) {
-      System.out.println("Percentages don't sum to one!");
-      System.exit(1);
-    }
+    /* Scale percentages. */
+    double totalPercentages =
+        drinkingPercentage + cropPercentage + hygienePercentage
+            + laundryPercentage + flushPercentage + medicalPercentage
+            + electrolysisPercentage;
+
+    drinkingPercentage = drinkingPercentage / totalPercentages;
+    cropPercentage = cropPercentage / totalPercentages;
+    hygienePercentage = hygienePercentage / totalPercentages;
+    laundryPercentage = laundryPercentage / totalPercentages;
+    flushPercentage = flushPercentage / totalPercentages;
+    medicalPercentage = medicalPercentage / totalPercentages;
+    electrolysisPercentage = electrolysisPercentage / totalPercentages;
 
     /* Initialise simulation related fields. */
     this.randomInst = new Random(42);
@@ -75,6 +81,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
       Human human = new HumanBuilder()
           .withPotableWaterTank(centralWaterTank)
           .withWasteWaterTank(wasteWaterTank)
+          .withCropWaterTank(cropWaterTank)
           .build();
       human.setHumanId(i);
       allHumans.put(i, human);
@@ -119,6 +126,12 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     productionUnit.generate();
   }
 
+  public void growCrops(double volume) {
+    double waterAvailable = centralWaterTank
+        .withdrawWaterWithReason(volume, WaterUseCase.CROP);
+    cropWaterTank.depositWater(waterAvailable);
+  }
+
   public void resetWaterUsage() {
     centralWaterTank.resetLimit();
   }
@@ -146,20 +159,21 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
         .mapToDouble(Human::getStandardOfLiving)
         .reduce(Double::sum)
         .orElseThrow() / population;
-    System.out.printf("Clean water: %.2f%n", centralWaterTank.getCurrentVolume());
+    System.out
+        .printf("Clean water: %.2f%n", centralWaterTank.getCurrentVolume());
     System.out.printf("Waste water: %.2f%n", wasteWaterTank.getCurrentVolume());
     System.out.printf("Average SOL: %.2f%n", averageStandardOfLiving);
     centralWaterTank.printWaterAvailable();
   }
 
   public static void main(String[] args) {
-    double drinkingPercentage = 0.4;
-    double cropPercentage = 0.0;
-    double hygienePercentage = 0.0;
-    double laundryPercentage = 0.0;
-    double flushPercentage = 0.1;
-    double medicalPercentage = 0.1;
-    double electrolysisPercentage = 0.4;
+    double drinkingPercentage = 0.12;
+    double cropPercentage = 0.02;
+    double hygienePercentage = 0.03;
+    double laundryPercentage = 0.54;
+    double flushPercentage = 0.01;
+    double medicalPercentage = 0.01;
+    double electrolysisPercentage = 0.27;
     CentralSystemSim simulation = new CentralSystemSim(drinkingPercentage,
         cropPercentage, hygienePercentage, laundryPercentage, flushPercentage,
         medicalPercentage, electrolysisPercentage);

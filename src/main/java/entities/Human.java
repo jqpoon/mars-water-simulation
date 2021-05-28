@@ -55,26 +55,14 @@ public class Human {
     return standardOfLiving;
   }
 
-  /* Attempts to use water from the potable water tank. If unable to use
-   * the requested amount, then reduce SoL scaled to a constant. */
-  public void useWater(WaterUseCase useCase, double volumeRequested) {
+  private void updateStandardOfLiving(WaterUseCase useCase, double volumeRequested,
+      double volumeReceived) {
 
     double importance = useCase.getImportance();
-    double volumeDrank;
 
-    /* TODO: Potential for refactor here. How to deal with smart water tanks
-     * with a specific method call? */
-    if (potableWaterTank instanceof SmartWaterTank) {
-      volumeDrank = ((SmartWaterTank) potableWaterTank)
-          .withdrawWaterWithReason(volumeRequested, useCase);
-    } else {
-      volumeDrank = potableWaterTank.withdrawWater(volumeRequested);
-    }
-
-    /* Calculate new standard of living accordingly. */
-    if (volumeDrank != volumeRequested) {
+    if (volumeReceived != volumeRequested) {
       standardOfLiving -=
-          (volumeRequested - volumeDrank) / volumeRequested
+          (volumeRequested - volumeReceived) / volumeRequested
               * importance / useCase.getDailyFrequency();
       standardOfLiving = Math.max(standardOfLiving, 0);
 
@@ -89,6 +77,24 @@ public class Human {
     if (useCase.equals(MEDICAL) && !componentSatisfaction.get(MEDICAL)) {
       standardOfLiving = 0;
     }
+  }
+
+  /* Attempts to use water from the potable water tank. If unable to use
+   * the requested amount, then reduce SoL scaled to a constant. */
+  public void useWater(WaterUseCase useCase, double volumeRequested) {
+    double volumeReceived;
+
+    /* TODO: Potential for refactor here. How to deal with smart water tanks
+     * with a specific method call? */
+    if (potableWaterTank instanceof SmartWaterTank) {
+      volumeReceived = ((SmartWaterTank) potableWaterTank)
+          .withdrawWaterWithReason(volumeRequested, useCase);
+    } else {
+      volumeReceived = potableWaterTank.withdrawWater(volumeRequested);
+    }
+
+    /* Calculate new standard of living accordingly. */
+    updateStandardOfLiving(useCase, volumeRequested, volumeReceived);
   }
 
   public void drink(double volume) {
@@ -115,6 +121,7 @@ public class Human {
   }
 
   public void eatFood(double volume) {
-    cropWaterTank.withdrawWater(volume);
+    double waterReceived = cropWaterTank.withdrawWater(volume);
+    updateStandardOfLiving(EAT, volume, waterReceived);
   }
 }
