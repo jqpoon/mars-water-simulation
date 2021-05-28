@@ -10,7 +10,9 @@ import entities.tanks.CropWaterTank;
 import entities.tanks.LowQualityWaterTank;
 import entities.tanks.SmartWaterTank;
 import entities.tanks.WaterTank;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import simulation.central.events.timed.DailyEvent;
@@ -21,15 +23,15 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   public static final int HOURS_IN_A_DAY = 24;
 
   /* Simulation parameters. */
-  private final int population = 1;
-  private final int simulationDayCount = 1;
+  private final int population = 100;
+  private final int simulationDayCount = 10;
 
   private static final double CROP_EFFICIENCY = 88.0 / 134.0;
   private static final double CONVERTER_EFFICIENCY = 0.935;
-  private static final double VOLUME_PER_CONVERSION = 10000;
+  private static final double VOLUME_PER_CONVERSION = 100000;
 
   /* Volume listed is per day per person. */
-  private static final double DAILY_MAXIMUM_VOLUME_USABLE = 10;
+  private static final double DAILY_MAXIMUM_VOLUME_USABLE = 9;
   private static final double VOLUME_PER_GENERATION = 4.128;
 
   private final Map<Integer, Human> allHumans = new HashMap<>();
@@ -150,15 +152,24 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   @Override
   protected void initSimulation() {
-    centralWaterTank.depositWater(1000);
+    centralWaterTank.depositWater(840 * population);
     schedule(new DailyEvent(), 0);
   }
 
-  public void printStatistics() {
-    double averageStandardOfLiving = allHumans.values().stream()
+  /* ------------ Simulation statistics ------------ */
+
+  private final List<Double> standardOfLivingRecord = new ArrayList<>();
+
+  private final double getAverageStandardOfLiving() {
+    return allHumans.values().stream()
         .mapToDouble(Human::getStandardOfLiving)
         .reduce(Double::sum)
         .orElseThrow() / population;
+  }
+
+  /*  */
+  public void printStatistics() {
+    double averageStandardOfLiving = getAverageStandardOfLiving();
     System.out
         .printf("Clean water: %.2f%n", centralWaterTank.getCurrentVolume());
     System.out.printf("Waste water: %.2f%n", wasteWaterTank.getCurrentVolume());
@@ -166,20 +177,35 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     centralWaterTank.printWaterAvailable();
   }
 
+  public void recordStatistics() {
+    standardOfLivingRecord.add(getAverageStandardOfLiving());
+  }
+
+  public void printResultStatistics() {
+    StringBuilder outputString = new StringBuilder();
+    for (Double value : standardOfLivingRecord) {
+      outputString.append(value);
+      outputString.append(" ");
+    }
+
+    System.out.println(outputString.toString());
+  }
+
   public static void main(String[] args) {
-    double drinkingPercentage = 0.12;
-    double cropPercentage = 0.02;
-    double hygienePercentage = 0.03;
-    double laundryPercentage = 0.54;
-    double flushPercentage = 0.01;
-    double medicalPercentage = 0.01;
-    double electrolysisPercentage = 0.27;
+    double drinkingPercentage = 9.924;
+    double cropPercentage = 11.99;
+    double hygienePercentage = 3.17;
+    double laundryPercentage = 25.29;
+    double flushPercentage = 0.496;
+    double medicalPercentage = 0.396;
+    double electrolysisPercentage = 19.72;
     CentralSystemSim simulation = new CentralSystemSim(drinkingPercentage,
         cropPercentage, hygienePercentage, laundryPercentage, flushPercentage,
         medicalPercentage, electrolysisPercentage);
 
     simulation.initSimulation();
     simulation.simulate();
+    simulation.printResultStatistics();
   }
 
 }

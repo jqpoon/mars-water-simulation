@@ -9,8 +9,9 @@ public class HourlyEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     double currTime = simulation.getCurrentTime();
-    System.out.printf("--------- HOUR %.0f ---------%n", currTime);
-    simulation.printStatistics();
+//    System.out.printf("--------- HOUR %.0f ---------%n", currTime);
+//    simulation.printStatistics();
+    simulation.recordStatistics();
 
     simulation.schedule(new ElectrolysisEvent(), currTime);
   }

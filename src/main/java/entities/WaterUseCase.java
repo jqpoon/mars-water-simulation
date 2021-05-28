@@ -8,7 +8,7 @@ public enum WaterUseCase {
   MEDICAL(0.0535, 0, 0),
   LAUNDRY(7.33, 0.3, 1),
   ELECTROLYSIS(2.663, 1.2, 24),
-  EAT(0.88, 0.95, Frequency.DRINK_FREQUENCY);
+  EAT(0.88, 0.75, Frequency.DRINK_FREQUENCY);
 
   private final double dailyVolume;
   private final double importance;
