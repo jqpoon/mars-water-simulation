@@ -34,5 +34,9 @@ public class DailyEvent implements Event<CentralSystemSim> {
         simulation.schedule(new HourlyEvent(), currTime + i);
       }
     }
+
+    /* Schedule the next daily event. */
+    simulation.schedule(new DailyEvent(), currTime + HOURS_IN_DAY);
+
   }
 }
