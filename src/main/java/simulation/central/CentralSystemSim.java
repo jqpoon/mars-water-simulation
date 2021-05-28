@@ -16,11 +16,11 @@ import simulation.framework.Simulation;
 
 public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
-  private static final int HOURS_IN_A_DAY = 24;
+  public static final int HOURS_IN_A_DAY = 24;
 
   /* Simulation parameters. */
-  private static final int POPULATION = 1;
-  private static final int NO_OF_SIMULATION_DAYS = 1;
+  private final int POPULATION = 1;
+  private final int NO_OF_SIMULATION_DAYS = 1;
 
   private static final double VOLUME_PER_GENERATION = 4.128;
   private static final double CONVERTER_EFFICIENCY = 0.935;
@@ -31,8 +31,8 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   /* Frequency of events. If not listed, this event is scheduled
    * once a day. */
-  public static final int DRINK_FREQUENCY = 10;
-  public static final int HYGIENE_FREQUENCY = 2;
+  public final int DRINK_FREQUENCY = 10;
+  public final int HYGIENE_FREQUENCY = 2;
 
   private final Map<Integer, Human> allHumans = new HashMap<>();
   private final SmartWaterTank centralWaterTank;
@@ -81,6 +81,9 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
         electrolysisPercentage);
   }
 
+  public int getPopulation() {
+    return POPULATION;
+  }
   public Random getRandomInst() {
     return randomInst;
   }
@@ -95,6 +98,10 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   public Human getHumanById(int id) {
     return allHumans.get(id);
+  }
+
+  public double useWaterFromCentralTank(WaterUseCase useCase, double volume) {
+    return centralWaterTank.withdrawWaterWithReason(volume, useCase);
   }
 
   @Override
