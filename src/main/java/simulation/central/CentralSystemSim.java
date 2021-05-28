@@ -28,12 +28,6 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   /* Volumes listed are per day per person. */
   private static final double DAILY_MAXIMUM_VOLUME_USABLE = 10;
-  public static final double DRINK_VOLUME = 1.62;
-  public static final double CROP_VOLUME = 1.34;
-  public static final double HYGIENE_VOLUME = 0.428;
-  public static final double LAUNDRY_VOLUME = 7.33;
-  public static final double FLUSH_VOLUME = 0.067;
-  public static final double ELECTROLYSIS_VOLUME = 2.663;
 
   /* Frequency of events. If not listed, this event is scheduled
    * once a day. */
