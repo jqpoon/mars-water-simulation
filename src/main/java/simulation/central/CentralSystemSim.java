@@ -139,13 +139,14 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
         .reduce(Double::sum)
         .orElseThrow() / population;
     System.out.printf("Average SOL: %.2f%n", averageStandardOfLiving);
+//    centralWaterTank.printWaterAvailable();
   }
 
   public static void main(String[] args) {
-    double drinkingPercentage = 0.1;
-    double cropPercentage = 0.1;
-    double hygienePercentage = 0.1;
-    double laundryPercentage = 0.1;
+    double drinkingPercentage = 0.4;
+    double cropPercentage = 0.0;
+    double hygienePercentage = 0.0;
+    double laundryPercentage = 0.0;
     double flushPercentage = 0.1;
     double medicalPercentage = 0.1;
     double electrolysisPercentage = 0.4;

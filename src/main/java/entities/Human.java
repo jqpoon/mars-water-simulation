@@ -55,9 +55,7 @@ public class Human {
           (volumeRequested - volumeDrank) / volumeRequested * importance;
       standardOfLiving = Math.max(standardOfLiving, 0);
 
-      System.out.printf(
-          "Insufficient water for %s! Current standard of living: %.02f%n",
-          useCase.name(), standardOfLiving);
+      System.out.printf("Insufficient water for %s!%n", useCase.name());
     } else {
       standardOfLiving += importance;
     }

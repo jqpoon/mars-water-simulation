@@ -46,4 +46,10 @@ public class SmartWaterTank extends AbstractWaterTank {
     /* Else withdraw as per normal. */
     return withdrawWater(volume);
   }
+
+  public void printWaterAvailable() {
+    for (Map.Entry<WaterUseCase, Double> entry : currentWaterAvailable.entrySet()) {
+      System.out.printf("%s - %.2f%n", entry.getKey().name(), entry.getValue());
+    }
+  }
 }
