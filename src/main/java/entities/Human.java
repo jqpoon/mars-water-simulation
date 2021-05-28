@@ -11,12 +11,12 @@ public class Human {
 
   public static final double INITIAL_SOL_VALUE = 5;
   public static final double MAX_SOL_VALUE = 10;
+  public static final double HUMAN_WATER_USE_EFFICIENCY = 220.0 / 250.0;
 
   /* Tracks whether this human has satisfied each component at the end
    * of the day. If yes, increase its standard of living by the component's
    * importance factor. */
   private final Map<WaterUseCase, Boolean> componentFulfilled = new HashMap<>();
-
   private final WaterTank potableWaterTank;
   private final WaterTank wasteWaterTank;
   private int humanId;
@@ -61,7 +61,7 @@ public class Human {
     double importance = useCase.getImportance();
     double volumeDrank;
 
-    /* Potential for refactor here. How to deal with smart water tanks
+    /* TODO: Potential for refactor here. How to deal with smart water tanks
      * with a specific method call? */
     if (potableWaterTank instanceof SmartWaterTank) {
       volumeDrank = ((SmartWaterTank) potableWaterTank)
