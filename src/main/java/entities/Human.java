@@ -43,6 +43,7 @@ public class Human {
       if (entry.getValue()) {
         /* Component was satisfied, so we can add to the SOL. */
         standardOfLiving += entry.getKey().getImportance();
+        standardOfLiving = Math.min(standardOfLiving, MAX_SOL_VALUE);
       }
     }
   }
