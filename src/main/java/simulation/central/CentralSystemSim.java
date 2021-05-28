@@ -120,6 +120,10 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     productionUnit.generate();
   }
 
+  public void resetWaterUsage() {
+    centralWaterTank.resetLimit();
+  }
+
   /* ------------ Simulation related functions ------------ */
   @Override
   protected boolean stop() {
@@ -134,6 +138,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   @Override
   protected void initSimulation() {
+    centralWaterTank.depositWater(1000);
     schedule(new DailyEvent(), 0);
   }
 
@@ -145,7 +150,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     System.out.printf("Clean water: %.2f%n", centralWaterTank.getCurrentVolume());
     System.out.printf("Waste water: %.2f%n", wasteWaterTank.getCurrentVolume());
     System.out.printf("Average SOL: %.2f%n", averageStandardOfLiving);
-//    centralWaterTank.printWaterAvailable();
+    centralWaterTank.printWaterAvailable();
   }
 
   public static void main(String[] args) {

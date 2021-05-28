@@ -17,6 +17,9 @@ public class DailyEvent implements Event<CentralSystemSim> {
   public void invoke(CentralSystemSim simulation) {
     double currTime = simulation.getCurrentTime();
 
+    /* Reset water usage. */
+    simulation.resetWaterUsage();
+
     /* Generate water at 12am everyday. */
     simulation.schedule(new GenerateWaterEvent(), currTime);
 
