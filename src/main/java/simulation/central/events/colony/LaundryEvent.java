@@ -12,6 +12,8 @@ public class LaundryEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     simulation.useWaterFromCentralTank(LAUNDRY,
-        LAUNDRY.getDailyVolume() * simulation.getPopulation());
+        LAUNDRY.getDailyVolume()
+            / LAUNDRY.getDailyFrequency()
+            * simulation.getPopulation());
   }
 }

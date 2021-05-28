@@ -12,6 +12,8 @@ public class ElectrolysisEvent implements Event<CentralSystemSim> {
   @Override
   public void invoke(CentralSystemSim simulation) {
     simulation.useWaterFromCentralTank(ELECTROLYSIS,
-        ELECTROLYSIS.getDailyVolume() / ELECTROLYSIS.getDailyFrequency() * simulation.getPopulation());
+        ELECTROLYSIS.getDailyVolume()
+            / ELECTROLYSIS.getDailyFrequency()
+            * simulation.getPopulation());
   }
 }

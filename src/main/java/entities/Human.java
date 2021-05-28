@@ -11,7 +11,6 @@ public class Human {
 
   public static final double INITIAL_SOL_VALUE = 5;
   public static final double MAX_SOL_VALUE = 10;
-  private final Map<WaterUseCase, Double> importanceFactors = new HashMap<>();
 
   /* Tracks whether this human has satisfied each component at the end
    * of the day. If yes, increase its standard of living by the component's
@@ -27,8 +26,23 @@ public class Human {
     this.potableWaterTank = potableWaterTank;
     this.wasteWaterTank = wasteWaterTank;
 
+    resetComponents();
+  }
+
+  /* Human starts the day satisfied with each component. */
+  public void resetComponents() {
     for (WaterUseCase useCase : WaterUseCase.values()) {
-      importanceFactors.put(useCase, useCase.getImportance());
+      componentFulfilled.put(useCase, true);
+    }
+  }
+
+  /* Calculate end of day SOL based on satisfaction in each component. */
+  public void calculateEndOfDaySOL() {
+    for (Map.Entry<WaterUseCase, Boolean> entry : componentFulfilled.entrySet()) {
+      if (entry.getValue()) {
+        /* Component was satisfied, so we can add to the SOL. */
+        standardOfLiving += entry.getKey().getImportance();
+      }
     }
   }
 
@@ -44,7 +58,7 @@ public class Human {
    * the requested amount, then reduce SoL scaled to a constant. */
   public void useWater(WaterUseCase useCase, double volumeRequested) {
 
-    double importance = importanceFactors.get(useCase);
+    double importance = useCase.getImportance();
     double volumeDrank;
 
     /* Potential for refactor here. How to deal with smart water tanks
@@ -59,9 +73,11 @@ public class Human {
     /* Calculate new standard of living accordingly. */
     if (volumeDrank != volumeRequested) {
       standardOfLiving -=
-          (volumeRequested - volumeDrank) / volumeRequested * importance;
+          (volumeRequested - volumeDrank) / volumeRequested
+              * importance / useCase.getDailyFrequency();
       standardOfLiving = Math.max(standardOfLiving, 0);
 
+      componentFulfilled.put(useCase, false);
 //      System.out.printf("Insufficient water for %s! for Blob %d%n", useCase.name(), humanId);
     }
 

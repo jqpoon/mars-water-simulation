@@ -33,6 +33,11 @@ public class DailyEvent implements Event<CentralSystemSim> {
     scheduleShowerEvents(simulation);
     scheduleLaundryEvent(simulation);
 
+    /* Calculate daily SOLs for all humans. */
+    for (int i = 0; i < simulation.getPopulation(); i++) {
+      simulation.getHumanById(i).calculateEndOfDaySOL();
+    }
+
     /* Schedule next day's hourly events. */
     if ((int) currTime % HOURS_IN_A_DAY == 0) {
       for (int i = 0; i < HOURS_IN_A_DAY; i++) {
