@@ -23,15 +23,15 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   public static final int HOURS_IN_A_DAY = 24;
 
   /* Simulation parameters. */
-  private final int population = 100;
-  private final int simulationDayCount = 10;
+  private final int population;
+  private final int simulationDayCount;
 
   private static final double CROP_EFFICIENCY = 88.0 / 134.0;
   private static final double CONVERTER_EFFICIENCY = 0.935;
   private static final double VOLUME_PER_CONVERSION = 100000;
 
   /* Volume listed is per day per person. */
-  private static final double DAILY_MAXIMUM_VOLUME_USABLE = 9;
+  private final double dailyMaximumDailyUsable;
   private static final double VOLUME_PER_GENERATION = 4.128;
 
   private final Map<Integer, Human> allHumans = new HashMap<>();
@@ -45,7 +45,12 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   public CentralSystemSim(double drinkingPercentage, double cropPercentage,
       double hygienePercentage, double laundryPercentage,
       double flushPercentage, double medicalPercentage,
-      double electrolysisPercentage) {
+      double electrolysisPercentage, int population, int simulationDayCount,
+      double dailyMaximumDailyUsable) {
+
+    this.population = population;
+    this.simulationDayCount = simulationDayCount;
+    this.dailyMaximumDailyUsable = dailyMaximumDailyUsable;
 
     /* Scale percentages. */
     double totalPercentages =
@@ -67,7 +72,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
     /* Initialise tank entities. */
     cropWaterTank = new CropWaterTank(CROP_EFFICIENCY);
     centralWaterTank = new SmartWaterTank(
-        DAILY_MAXIMUM_VOLUME_USABLE * population);
+        dailyMaximumDailyUsable * population);
     wasteWaterTank = new LowQualityWaterTank();
     productionUnit = new WaterGenerator(centralWaterTank,
         VOLUME_PER_GENERATION * population);
@@ -160,14 +165,14 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
 
   private final List<Double> standardOfLivingRecord = new ArrayList<>();
 
-  private final double getAverageStandardOfLiving() {
-    return allHumans.values().stream()
-        .mapToDouble(Human::getStandardOfLiving)
-        .reduce(Double::sum)
-        .orElseThrow() / population;
+  private double getAverageStandardOfLiving() {
+    double sum = 0;
+    for (int i = 0; i < population; i++) {
+      sum += getHumanById(i).getStandardOfLiving();
+    }
+    return sum / (double) population;
   }
 
-  /*  */
   public void printStatistics() {
     double averageStandardOfLiving = getAverageStandardOfLiving();
     System.out
@@ -178,30 +183,57 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   }
 
   public void recordStatistics() {
-    standardOfLivingRecord.add(getAverageStandardOfLiving());
+    double averageStandardOfLiving = getAverageStandardOfLiving();
+    assert(averageStandardOfLiving <= 10);
+    standardOfLivingRecord.add(averageStandardOfLiving);
   }
 
   public void printResultStatistics() {
     StringBuilder outputString = new StringBuilder();
     for (Double value : standardOfLivingRecord) {
-      outputString.append(value);
-      outputString.append(" ");
+      outputString.append(String.format("%.5f ", value));
     }
 
     System.out.println(outputString.toString());
   }
 
   public static void main(String[] args) {
-    double drinkingPercentage = 9.924;
-    double cropPercentage = 11.99;
-    double hygienePercentage = 3.17;
-    double laundryPercentage = 25.29;
-    double flushPercentage = 0.496;
-    double medicalPercentage = 0.396;
-    double electrolysisPercentage = 19.72;
+//    double drinkingPercentage = 9.924;
+//    double cropPercentage = 11.99;
+//    double hygienePercentage = 3.17;
+//    double laundryPercentage = 25.29;
+//    double flushPercentage = 0.496;
+//    double medicalPercentage = 0.396;
+//    double electrolysisPercentage = 19.72;
+//
+//    int population = 10;
+//    int simulationDayCount = 10;
+//    double maximumDailyUsable = 8;
+
+    if (args.length != 10) {
+      System.out.println("Usage: ");
+      System.out.println(
+          "simulation.jar [drinking] [crop] [hygiene] [laundry] [flush] "
+              + "[medical] [electrolysis] [population] [noOfDays] "
+              + "[maximumDailyUsable]");
+      System.exit(1);
+    }
+
+    double drinkingPercentage = Double.parseDouble(args[0]);
+    double cropPercentage = Double.parseDouble(args[1]);
+    double hygienePercentage = Double.parseDouble(args[2]);
+    double laundryPercentage = Double.parseDouble(args[3]);
+    double flushPercentage = Double.parseDouble(args[4]);
+    double medicalPercentage = Double.parseDouble(args[5]);
+    double electrolysisPercentage = Double.parseDouble(args[6]);
+    int population = Integer.parseInt(args[7]);
+    int simulationDayCount = Integer.parseInt(args[8]);
+    double maximumDailyUsable = Double.parseDouble(args[9]);
+
     CentralSystemSim simulation = new CentralSystemSim(drinkingPercentage,
         cropPercentage, hygienePercentage, laundryPercentage, flushPercentage,
-        medicalPercentage, electrolysisPercentage);
+        medicalPercentage, electrolysisPercentage, population,
+        simulationDayCount, maximumDailyUsable);
 
     simulation.initSimulation();
     simulation.simulate();

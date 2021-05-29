@@ -19,3 +19,9 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'simulation.central.CentralSystemSim'
+    }
+}
