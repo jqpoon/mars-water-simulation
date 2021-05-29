@@ -194,7 +194,7 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
       outputString.append(String.format("%.5f ", value));
     }
 
-    System.out.println(outputString.toString());
+    System.out.print(outputString.toString());
   }
 
   public static void main(String[] args) {
