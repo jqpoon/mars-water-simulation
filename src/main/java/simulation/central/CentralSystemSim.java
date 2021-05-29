@@ -198,17 +198,18 @@ public class CentralSystemSim extends Simulation<CentralSystemSim> {
   }
 
   public static void main(String[] args) {
-//    double drinkingPercentage = 9.924;
-//    double cropPercentage = 11.99;
+  /* Uncomment to use unoptimised, base values. */
+//    double drinkingPercentage = 11.99;
+//    double cropPercentage = 9.924;
 //    double hygienePercentage = 3.17;
-//    double laundryPercentage = 25.29;
+//    double laundryPercentage = 54.29;
 //    double flushPercentage = 0.496;
 //    double medicalPercentage = 0.396;
 //    double electrolysisPercentage = 19.72;
 //
-//    int population = 10;
+//    int population = 100;
 //    int simulationDayCount = 10;
-//    double maximumDailyUsable = 8;
+//    double maximumDailyUsable = 10;
 
     if (args.length != 10) {
       System.out.println("Usage: ");

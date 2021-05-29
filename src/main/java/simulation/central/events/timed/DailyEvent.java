@@ -15,7 +15,8 @@ import simulation.framework.Event;
 
 public class DailyEvent implements Event<CentralSystemSim> {
 
-  private static final double MEDICAL_CHANCE = 0.01;
+  /* Pandemic situation. */
+  private static final double MEDICAL_CHANCE = 0.50;
 
   @Override
   public void invoke(CentralSystemSim simulation) {
