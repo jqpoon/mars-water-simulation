@@ -1,0 +1,68 @@
+double drinkingPercentage = 0.12;
+    double cropPercentage = 0.0;
+    double hygienePercentage = 0.03;
+    double laundryPercentage = 0.54;
+    double flushPercentage = 0.01;
+    double medicalPercentage = 0.00;
+    double electrolysisPercentage = 0.3;
+
+    double drinkingPercentage = 9.924;
+    double cropPercentage = 11.99;
+    double hygienePercentage = 3.17;
+    double laundryPercentage = 54.29;
+    double flushPercentage = 0.496;
+    double medicalPercentage = 0.396;
+    double electrolysisPercentage = 19.72;
+
+
+// 10 days, 
+[0.52205909 0.37521894 0.18795148 0.3662232  0.85066411 0.01798552
+ 0.86312913] 0.4752799999999997
+
+Population: 100
+Number of days: 100
+Max daily usable volume: 9
+[ 1.01886583 -3.08741697  0.32088891 -3.26742797  2.57658996  1.28637023
+  2.3835041 ] 1.3719999999999999
+
+Population: 100
+Number of days: 100
+Max daily usable volume: 9
+[0.7039219  0.53320619 0.16432764 0.02183199 0.79795581 0.04360191 0.91295635] 0.5269600000000008
+
+[0.7039219  0.53320619 0.16432764 0.02183199 0.79795581 0.04360191 0.91295635] 0.461159999999999
+
+
+Population: 100
+Number of days: 100
+Max daily usable volume: 9
+[0.67398692 0.54003877 0.17441524 0.28182352 0.94455032 0.00553897 0.98830396] 0.43427999999999933
+
+Population: 100
+Number of days: 20
+Max daily usable volume: 7
+[0.54989905 0.47316074 0.1467282  0.06280517 0.3554188  0.01906106
+ 0.94033908] 0.5144269999999995
+
+Population: 100
+Number of days: 10
+Max daily usable volume: 5
+[0.92217639 0.59109772 0.2457574  0.00906157 0.01010687 0.08193237 0.98333903] 0.7265490000000003
+
+Population: 100
+Number of days: 10
+Max daily usable volume: 1
+[0.20583265 0.32706704 0.71341782 0.33082316 0.75268635 0.91645108 0.75828248] 10.0
+
+Population: 100
+Number of days: 10
+Max daily usable volume: 4
+[0.97004171 0.68879507 0.24966711 0.03837763 0.04404222 0.03005756 0.61913045] 3.222099
+
+
+
+Population: 100
+Number of days: 10
+Max daily usable volume: 5
+[0.98959778 0.85060721 0.35725193 0.00211098 0.02511889 0.2084208
+ 0.95087705] 0.8301010000000009
